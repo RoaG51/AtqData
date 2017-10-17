@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>开局折线图</title>
+    <title>古董局中局后台管理系统</title>
     <meta name="description" content="这是一个 index 页面">
 <meta name="keywords" content="index">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -20,21 +20,13 @@
 </head>
 
 <body>
-<header class="am-topbar admin-header">
-  <div class="am-topbar-brand"><a href="index.html"><img src="../static/assets/i/logo.png"></a></div>
+<header class="am-topbar admin-header" style="background:rgb(42,51,63);">
+  <div class="am-topbar-brand"><a  style="color:rgb(174,178,183);" href="{{ url_for('show_index') }}">古董局中局后台管理系统</a></div>
   <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
     <ul class="am-nav am-nav-pills am-topbar-nav admin-header-list">
-      <li class="am-dropdown tognzhi" data-am-dropdown>
-        <button class="am-btn am-btn-primary am-dropdown-toggle am-btn-xs am-radius am-icon-bell-o" data-am-dropdown-toggle> 消息<span class="am-badge am-badge-danger am-round">170</span></button>
-        <ul class="am-dropdown-content">
-          <li class="am-dropdown-header">所有消息都在这里</li>
-         <li><a href="#">新的反馈数据 <span class="am-badge am-badge-danger am-round"></span></a></li>
-          <li><a href="#">新的用户 <span class="am-badge am-badge-danger am-round">110</span></a></a></li>
-          <li><a href="#">新的开局数<span class="am-badge am-badge-danger am-round">60</span></a></li>
-        </ul>
-      </li>
 
-      <li class="kuanjie"> <a href="#">用户数据</a> <a href="#">日历-用户</a> <a href="#">日历-开局</a>  <a href="#">个人中心</a> <a href="#">系统设置</a> </li>
+
+      <li class="kuanjie"> <a style="color:rgb(174,178,183);" href="{{ url_for('userList') }}">用户列表</a> <a style="color:rgb(174,178,183);" href="{{ url_for('gameList') }}">开局列表</a> <a style="color:rgb(174,178,183);" href="{{ url_for('userDiagram') }}">用户图列</a>  <a style="color:rgb(174,178,183);" href="{{ url_for('gameDiagram') }}">开局图列</a> <a style="color:rgb(174,178,183);" href="{{ url_for('dayUpUserList') }}">日增用户</a> <a style="color:rgb(174,178,183);" href="{{ url_for('dayUpGameList') }}">日增开局</a> </li>
       <li class="soso">
         <p>
           <select data-am-selected="{btnWidth: 70, btnSize: 'sm', btnStyle: 'default'}">
@@ -50,23 +42,25 @@
           <button class="am-btn am-btn-xs am-btn-default am-xiao"><i class="am-icon-search"></i></button>
         </p>
       </li>
-      <li class="am-hide-sm-only" style="float: right;"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+      <li class="am-hide-sm-only" style="float: right;"><a style="color:rgb(174,178,183);" href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
     </ul>
   </div>
 </header>
 <div class="am-cf admin-main">
   <div class="nav-navicon admin-main admin-sidebar">
-    <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎系统管理员：昊天</div>
+    <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎系统管理员：</div>
     <div class="sideMenu">
-      <h3 class="am-icon-cart-plus"><em></em> <a href="#"> 开局管理</a></h3>
+        <h3 class="am-icon-users"><em></em> <a href="#">用户管理</a></h3>
       <ul>
-        <li>开局列表</li>
-
+        <li><a href="{{ url_for('userList') }}">用户列表</a></li>
+        <li><a href="{{ url_for('userDiagram') }}">用户图列</a> </li>
+        <li><a href="{{ url_for('dayUpUserList') }}">日增用户</a> </li>
       </ul>
-      <h3 class="am-icon-users"><em></em> <a href="#">用户管理</a></h3>
+      <h3 class="am-icon-cart-plus"><em></em> <a href=""> 开局管理</a></h3>
       <ul>
-        <li><a href="{{url_for('userList') }}">用户列表</a></li>
-
+        <li><a href="{{ url_for('gameList') }}">开局列表</a></li>
+        <li><a href="{{ url_for('gameDiagram') }}">开局图列</a> </li>
+        <li><a href="{{ url_for('dayUpGameList') }}">日增开局</a> </li>
       </ul>
     </div>
     <script type="text/javascript">
@@ -161,7 +155,7 @@
         </div>
       </div>   
 
-  <div class="admin-biaogelist" id="main" style="height:400px;width: 900px"></div>
+  <div class="admin-biaogelist" id="main" style="height:70%;width: 70%"></div>
 <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts图表

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>古董局中局</title>
+<title>古董局中局后台管理系统</title>
 <meta name="description" content="这是一个 index 页面">
 <meta name="keywords" content="index">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -23,13 +23,12 @@
 
 <body>
 <header class="am-topbar admin-header" style="background:rgb(42,51,63);">
-  <div class="am-topbar-brand"><a href="{{ url_for('show_index') }}
-">后台管理系统</a></div>
+  <div class="am-topbar-brand"><a  style="color:rgb(174,178,183);" href="{{ url_for('show_index') }}">古董局中局后台管理系统</a></div>
   <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
     <ul class="am-nav am-nav-pills am-topbar-nav admin-header-list">
-      
 
-      <li class="kuanjie"> <a href="#">用户数据</a> <a href="#">日历-用户</a> <a href="#">日历-开局</a>  <a href="#">个人中心</a> <a href="#">系统设置</a> </li>
+
+      <li class="kuanjie"> <a style="color:rgb(174,178,183);" href="{{ url_for('userList') }}">用户列表</a> <a style="color:rgb(174,178,183);" href="{{ url_for('gameList') }}">开局列表</a> <a style="color:rgb(174,178,183);" href="{{ url_for('userDiagram') }}">用户图列</a>  <a style="color:rgb(174,178,183);" href="{{ url_for('gameDiagram') }}">开局图列</a> <a style="color:rgb(174,178,183);" href="{{ url_for('dayUpUserList') }}">日增用户</a> <a style="color:rgb(174,178,183);" href="{{ url_for('dayUpGameList') }}">日增开局</a> </li>
       <li class="soso">
         <p>
           <select data-am-selected="{btnWidth: 70, btnSize: 'sm', btnStyle: 'default'}">
@@ -45,7 +44,7 @@
           <button class="am-btn am-btn-xs am-btn-default am-xiao"><i class="am-icon-search"></i></button>
         </p>
       </li>
-      <li class="am-hide-sm-only" style="float: right;"><a href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+      <li class="am-hide-sm-only" style="float: right;"><a style="color:rgb(174,178,183);" href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
     </ul>
   </div>
 </header>
@@ -53,21 +52,17 @@
   <div class="nav-navicon admin-main admin-sidebar">
     <div class="sideMenu am-icon-dashboard" style="color:#aeb2b7; margin: 10px 0 0 0;"> 欢迎系统管理员：</div>
     <div class="sideMenu">
-<!--      <h3 class="am-icon-flag"><em></em> <a href="#">用户管理</a></h3>
+        <h3 class="am-icon-users"><em></em> <a href="#">用户管理</a></h3>
       <ul>
-        <li><a href="">用户列表</a></li>
-        <li class="func" dataType='html' dataLink='msn.htm' iconImg='images/msn.gif'>新用户</li>
-        <li>用户评论</li>
-      </ul> -->
+        <li><a href="{{ url_for('userList') }}">用户列表</a></li>
+        <li><a href="{{ url_for('userDiagram') }}">用户图列</a> </li>
+        <li><a href="{{ url_for('dayUpUserList') }}">日增用户</a> </li>
+      </ul>
       <h3 class="am-icon-cart-plus"><em></em> <a href=""> 开局管理</a></h3>
       <ul>
         <li><a href="{{ url_for('gameList') }}">开局列表</a></li>
-
-      </ul>
-      <h3 class="am-icon-users"><em></em> <a href="#">用户管理</a></h3>
-      <ul>
-        <li>用户列表 </li>
-
+        <li><a href="{{ url_for('gameDiagram') }}">开局图列</a> </li>
+        <li><a href="{{ url_for('dayUpGameList') }}">日增开局</a> </li>
       </ul>
 
     </div>
@@ -205,12 +200,12 @@
           <tbody id="tablelsw" class="am-text-center am-text-middle">
     {% for user in users %}
      <tr>
-	<td class="am-text-center am-text-middle">{{ user.id }}</td>
-    <td class="am-text-center am-text-middle"><script type="text/javascript">document.write(decodeURIComponent('{{ user.name }}'));</script></td>
-    <td class="am-text-center am-text-middle"><img src = {{ user.wxhead }} style = 'width:60px;height:60px'></img></td>
+	<td class="am-text-center am-text-middle">{{ user[0].id }}</td>
+    <td class="am-text-center am-text-middle"><script type="text/javascript">document.write(decodeURIComponent('{{ user[0].name }}'));</script></td>
+    <td class="am-text-center am-text-middle"><img src = {{ user[0].wxhead }} style = 'width:60px;height:60px'></img></td>
 	<td class="am-text-center am-text-middle">
         <script type="text/javascript">
-        if({{ user.wxsex}}==1)
+        if({{ user[0].wxsex}}==1)
         document.write('男');
         else
         document.write('女');
@@ -218,12 +213,12 @@
     </td>
     <td class="am-text-center am-text-middle">
         <script type="text/javascript">
-        var unixTimestamp = new Date({{ user.regTime }}*1000);
+        var unixTimestamp = new Date({{ user[0].regTime }}*1000);
         document.write(unixTimestamp.toLocaleString());</script>
     </td>
     <td class="am-text-center am-text-middle">
         <script type="text/javascript">
-            var unixTimestamp = new Date({{ user.regTime }}*1000);
+            var unixTimestamp = new Date({{ user[0].regTime }}*1000);
             Day = unixTimestamp.getDay()
             switch (Day) {
                 case 0:
@@ -251,20 +246,20 @@
                     document.write('未知星期');
             }
         </script>
-    <td class="am-text-center am-text-middle">{{ user.regIp}}</td>
-    <td class="am-text-center am-text-middle">{{ user.bfs[0].wins+user.bfs[0].losts}}</td>
+    <td class="am-text-center am-text-middle">{{ user[0].regIp}}</td>
+    <td class="am-text-center am-text-middle">{{ user[1]}}</td>
 	</tr>
   {% endfor %}
           </tbody>
         </table>
 
         <ul class="am-pagination am-fr">
-
-          <li><span id="spanFirst">&laquo;</span></li>
-          <li><span id="spanPre">&larr;</span></li>
-          <li><span id="spanNext">&rarr;</span></li>
-          <li><span id="spanLast">&raquo;</span></li>
-          第<span id="spanPageNum"></span>页/共<span id="spanTotalPage"></span>页
+          总用户数：{{tol_user}}        微信用户：{{tol_wechat}}       游客：{{tol_guest}}
+          <li><a href="{{url_for('userListPage',page=1)}}">首页</a></li>
+          <li><a href="{{url_for('userListPage',page=(1 if cur_page==1 else cur_page-1))}}">上一页</a></li>
+          <li><a href="{{url_for('userListPage',page=(tol_page if cur_page==tol_page else cur_page+1))}}">下一页</a></li>
+          <li><a href="{{url_for('userListPage',page=tol_page)}}">末页</a></li>
+          第<span>{{ cur_page }}</span>页/共<span>{{ tol_page }}</span>页
         </ul>
         <hr />    
       </form>
@@ -286,129 +281,4 @@
 </body>
 </html>
 
-<script>
-var theTable = document.getElementById("tablelsw");
-var totalPage = document.getElementById("spanTotalPage");
-var pageNum = document.getElementById("spanPageNum");
 
-var spanPre = document.getElementById("spanPre");
-var spanNext = document.getElementById("spanNext");
-var spanFirst = document.getElementById("spanFirst");
-var spanLast = document.getElementById("spanLast");
-
-var numberRowsInTable = theTable.rows.length;
-var pageSize = 10;
-var page = 1;
-
-//下一页
-function next(){
-
-    hideTable();
-
-    currentRow = pageSize * page;
-    maxRow = currentRow + pageSize;
-    if ( maxRow > numberRowsInTable ) maxRow = numberRowsInTable;
-    for ( var i = currentRow; i< maxRow; i++ ){
-        theTable.rows[i].style.display = '';
-    }
-    page++;
-
-    if ( maxRow == numberRowsInTable ) { nextText(); lastText(); }
-    showPage();
-    preLink();
-    firstLink();
-}
-
-//上一页
-function pre(){
-
-    hideTable();
-
-    page--;
-
-    currentRow = pageSize * page;
-    maxRow = currentRow - pageSize;
-    if ( currentRow > numberRowsInTable ) currentRow = numberRowsInTable;
-    for ( var i = maxRow; i< currentRow; i++ ){
-        theTable.rows[i].style.display = '';
-    }
-
-
-    if ( maxRow == 0 ){ preText(); firstText(); }
-    showPage();
-    nextLink();
-    lastLink();
-}
-
-//第一页
-function first(){
-    hideTable();
-    page = 1;
-    for ( var i = 0; i<pageSize; i++ ){
-        theTable.rows[i].style.display = '';
-    }
-    showPage();
-
-    preText();
-    nextLink();
-    lastLink();
-}
-
-//最后一页
-function last(){
-    hideTable();
-    page = pageCount();
-    currentRow = pageSize * (page - 1);
-    for ( var i = currentRow; i<numberRowsInTable; i++ ){
-        theTable.rows[i].style.display = '';
-    }
-    showPage();
-
-    preLink();
-    nextText();
-    firstLink();
-}
-
-function hideTable(){
-    for ( var i = 0; i<numberRowsInTable; i++ ){
-        theTable.rows[i].style.display = 'none';
-    }
-}
-
-function showPage(){
-    pageNum.innerHTML = page;
-}
-
-//总共页数
-function pageCount(){
-    var count = 0;
-    if ( numberRowsInTable%pageSize != 0 ) count = 1;
-    return parseInt(numberRowsInTable/pageSize) + count;
-}
-
-//显示链接
-function preLink(){ spanPre.innerHTML = "<a href='javascript:pre();'>&larr;</a>"; }
-function preText(){ spanPre.innerHTML = "&larr;";}
-
-function nextLink(){ spanNext.innerHTML = "<a href='javascript:next();'>&rarr;</a>";}
-function nextText(){ spanNext.innerHTML = "&rarr;";}
-
-function firstLink(){ spanFirst.innerHTML = "<a href='javascript:first();'>&laquo;</a>";}
-function firstText(){ spanFirst.innerHTML = "&laquo;";}
-
-function lastLink(){ spanLast.innerHTML = "<a href='javascript:last();'>&raquo;</a>"; }
-function lastText(){ spanLast.innerHTML = "&raquo;";}
-
-//隐藏表格
-function hide(){
-    for ( var i = pageSize; i<numberRowsInTable; i++ ){
-        theTable.rows[i].style.display = 'none';
-    }
-    totalPage.innerHTML = pageCount();
-    pageNum.innerHTML = '1';
-
-    nextLink();
-    lastLink();
-}
-hide();
-</script>
