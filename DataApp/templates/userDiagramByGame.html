@@ -66,6 +66,8 @@
         <li><a href="{{ url_for('dayUpGameList') }}">日增开局</a> </li>
       </ul>
     </div>
+
+    
     <script type="text/javascript">
       jQuery(".sideMenu").slide({
         titCell:"h3", //鼠标触发对象
@@ -76,7 +78,7 @@
         defaultPlay:true,//默认是否执行效果（默认true）
         returnDefault:true //鼠标从.sideMen移走后返回默认状态（默认false）
         });
-    </script>
+    </script> 
   </div>
   <div class=" admin-content">
     <div class="daohang">
@@ -85,17 +87,23 @@
         <button type="button" class="am-btn am-btn-default am-radius am-btn-xs">
         首页</button></a>
         </li>
+        
+        
       </ul>
     </div>
+
     <div class="am-popup am-popup-inner" id="my-popupss">
         <div class="am-popup-hd">
           <h4 class="am-popup-title">复制栏目</h4>
           <span data-am-modal-close class="am-close">&times;</span> </div>
         <div class="am-popup-bd">
           <form class="am-form tjlanmu">
+          
+          
           <div class="am-form-group">
               <div class="zuo">复制到：</div>
               <div class="you">
+              
   <select data-am-selected="{btnWidth: 200, btnSize: 'sm', btnStyle: 'danger'}">
   <option value="a">Apple</option>
   <option value="b">Banana</option>
@@ -103,8 +111,11 @@
   <option value="m">Mango</option>
 </select>
  顶级栏目选默认
+
               </div>
             </div>
+          
+          
             <div class="am-form-group">
               <div class="zuo">新栏目名称：</div>
               <div class="you">
@@ -157,100 +168,38 @@
           </form>
         </div>
       </div>
+
+    
     <div class="admin-biaogelist">
       <div class="listbiaoti am-cf">
         <ul class="am-icon-flag on">
-          用户列表管理
+          日增用户管理
         </ul>
         <dl class="am-icon-home" style="float: right;">
-          当前位置： <a href="{{ url_for('show_index') }}">首页</a> > 开局列表
+          当前位置： <a href="{{ url_for('show_index') }}">首页</a> > 日增用户
         </dl>
+
       </div>
       <form class="am-form am-g">
-        <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped am-table-hover">
+        <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped am-table-hover ">
           <thead>
-            <tr class="am-success">
+            <tr class="am-success ">
 <!--              <th class="table-check"><input type="checkbox" /></th>
               <th class="table-id">排序</th>  -->
-              <th class="table-title am-text-center">ID</th>
-              <th class="table-type am-text-center">游戏人数</th>
-              <th class="table-type am-text-center">获胜阵营</th>
-              <th class="table-type am-text-center">开局时间</th>
-              <th class="table-date am-hide-sm-only am-text-center">开局星期</th>
-<!--              <th width="163px" class="table-set">操作</th>  -->
+              <th class="table-title am-text-center">游戏局数</th>
+              <th class="table-title am-text-center">玩家数量</th>
             </tr>
           </thead>
-    <tbody id="tablelsw" class="am-text-center">
-    {% for game in games %}
+          <tbody id="tablelsw" class="am-text-center am-text-middle">
+    {% for data in datas %}
      <tr>
-  <td>{{ game.id }}</td>
-    <td>
-        <script type="text/javascript">
-        if('{{ game.u7}}'!= 'None')
-            if('{{ game.u8}}'!= 'None')
-                document.write('8');
-            else
-                document.write('7');
-        else
-            document.write('6');
-        </script>
-    </td>
-  <td>
-        <script type="text/javascript">
-        if({{ game.isHaoren}}==1)
-        document.write('许愿');
-        else
-        document.write('老朝奉');
-        </script>
-    <td>
-        <script type="text/javascript">
-        var unixTimestamp = new Date({{ game.logTime }}*1000);
-        document.write(unixTimestamp.toLocaleString());</script>
-    </td>
-    <td>
-        <script type="text/javascript">
-            var unixTimestamp = new Date({{ game.logTime }}*1000);
-            Day = unixTimestamp.getDay()
-            switch (Day) {
-                case 0:
-                    document.write('星期日');
-                    break;
-                case 1:
-                    document.write('星期一');
-                    break;
-                case 2:
-                    document.write('星期二');
-                    break;
-                case 3:
-                    document.write('星期三');
-                    break;
-                case 4:
-                    document.write('星期四');
-                    break;
-                case 5:
-                    document.write('星期五');
-                    break;
-                case 6:
-                    document.write('星期六');
-                    break;
-                default:
-                    document.write('未知星期');
-            }
-        </script>
-  </tr>
+  <td>{{ data[0] }}</td>
+  <td>{{ data[1] }}</td>
   {% endfor %}
+          </tbody>
         </table>
 
-        <ul class="am-pagination am-fr">
-          总开局数：{{tol_game}}
-          <li><a href="{{url_for('gameListPage',page=1)}}">首页</a></li>
-          <li><a href="{{url_for('gameListPage',page=(1 if cur_page==1 else cur_page-1))}}">上一页</a></li>
-          <li><a href="{{url_for('gameListPage',page=(tol_page if cur_page==tol_page else cur_page+1))}}">下一页</a></li>
-          <li><a href="{{url_for('gameListPage',page=tol_page)}}">末页</a></li>
-          第<span>{{ cur_page }}</span>页/共<span>{{ tol_page }}</span>页
-        </ul>
-
-        <hr />
+        <hr />    
       </form>
 
       <div class="foods">
@@ -265,8 +214,25 @@
   </div>
 </div>
 
-
 <script src="../static/assets/js/amazeui.min.js"></script>
-</body>
+
 </body>
 </html>
+
+<script type="text/javascript">
+            $(document).ready(function display(){
+                $("#btn5").click(function changePage(){
+                    curPage=document.getElementById("changePage").value * 1;
+                    if (!/^[1-9]\d*$/.test({{cur_Page}})) {
+                        alert("请输入正整数");
+                        return ;
+                    }
+                    if ({{cur_Page}} > tol_page) {
+                        alert("超出数据页面");
+                        return ;
+                    }
+                    direct = 0;
+                    displayPage();
+                });
+            });
+    </script>

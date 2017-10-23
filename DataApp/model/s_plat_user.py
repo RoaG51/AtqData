@@ -24,7 +24,7 @@ class s_plat_user(db.Model):
     name = db.Column(db.String(255))
     wxid = db.Column(db.String(128))
     bfs = db.relationship('s_plat_fightbfs', backref='user',
-                                lazy='dynamic')
+                                lazy='select',uselist=False)
 
 
 

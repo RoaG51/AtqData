@@ -57,6 +57,7 @@
         <li><a href="{{ url_for('userList') }}">用户列表</a></li>
         <li><a href="{{ url_for('userDiagram') }}">用户图列</a> </li>
         <li><a href="{{ url_for('dayUpUserList') }}">日增用户</a> </li>
+        <li><a href="{{ url_for('userDiagramByGame') }}">用户局数</a> </li>
       </ul>
       <h3 class="am-icon-cart-plus"><em></em> <a href=""> 开局管理</a></h3>
       <ul>
@@ -186,6 +187,7 @@
 <!--              <th class="table-check"><input type="checkbox" /></th>
               <th class="table-id">排序</th>  -->
               <th class="table-title am-text-center">日期</th>
+              <th class="table-title am-text-center">星期</th>
               <th class="table-title am-text-center">新增用户</th>
               <th class="table-title am-text-center">总用户</th>
             </tr>
@@ -196,6 +198,37 @@
   <td><script type="text/javascript">
         var unixTimestamp = new Date({{ user[0] }}*1000);
         document.write(unixTimestamp.toLocaleDateString());</script></td>
+      <td class="am-text-center am-text-middle">
+        <script type="text/javascript">
+            var unixTimestamp = new Date({{ user[0] }}*1000);
+            Day = unixTimestamp.getDay()
+            switch (Day) {
+                case 0:
+                    document.write('星期日');
+                    break;
+                case 1:
+                    document.write('星期一');
+                    break;
+                case 2:
+                    document.write('星期二');
+                    break;
+                case 3:
+                    document.write('星期三');
+                    break;
+                case 4:
+                    document.write('星期四');
+                    break;
+                case 5:
+                    document.write('星期五');
+                    break;
+                case 6:
+                    document.write('星期六');
+                    break;
+                default:
+                    document.write('未知星期');
+            }
+        </script>
+    </td>
   <td>{{ user[2] }}</td>
   <td>{{ user[1] }}</td>
   {% endfor %}
