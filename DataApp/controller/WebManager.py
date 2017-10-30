@@ -5,6 +5,7 @@ from DataApp.model.s_plat_fightlog import s_plat_fightlog
 from DataApp import app,db
 from flask import render_template,redirect,url_for
 from datetime import datetime
+from innerFunctions import periodAnalyse
 import time,math
 
 @app.route('/')
@@ -69,6 +70,7 @@ def dayUpGameListPage(page):
         myData.append([firstDay + secDay * i, Num, Num - preNum])
         preNum = Num
         i += 1
+    myData.reverse()
     tol_item = len(myData)
     tol_page = int(math.ceil(tol_item / 20.0))
     cur_page = page
@@ -103,14 +105,11 @@ def userListByGame():
 @app.route('/userListByGame/<int:page>')
 def userListByGamePage(page):
     gdusers = s_plat_fightbfs.query.join(s_plat_user).order_by(db.desc(s_plat_fightbfs.wins+s_plat_fightbfs.losts)).all()
-    #gdusers = s_plat_fightbfs.query.order_by(db.desc(s_plat_fightbfs.games)).all()
-    #gdusers = s_plat_user.query.join(s_plat_fightbfs).order_by(db.desc(s_plat_user.bfs)).all()
-    #gdusers.sort(key = lambda gdusers:gdusers.bfs[0], reverse=True)
 
     tol_item = len(gdusers)
     tol_page = int(math.ceil(tol_item /10.0))
     cur_page = page
-    return render_template('userListByGame.html', users=gdusers[10*page-10:10*page], cur_page=cur_page, tol_page=tol_page, tol_user = tol_item)
+    return render_template('userDataByGame.html', users=gdusers[10 * page - 10:10 * page], cur_page=cur_page, tol_page=tol_page, tol_user = tol_item)
 
 
 @app.route('/userDiagram')
@@ -119,15 +118,7 @@ def userDiagram():
     firstDay = datetime(2017,9,9,0,0,0)
     firstDay = time.mktime(firstDay.timetuple())
     toDay = time.time()
-    myData=[]
-    preNum = 0
-    i =0
-    while firstDay+secDay*i < toDay:
-        gdusers = s_plat_user.query.filter(s_plat_user.regTime <firstDay+secDay*(i+1)).all()
-        Num = len(gdusers)
-        myData.append([firstDay+secDay*i,Num,Num-preNum])
-        preNum = Num
-        i += 1
+    myData = growthAnalyse(table=s_plat_user, time=s_plat_user.regTime, start=firstDay, step=secDay, end=toDay)
     return render_template('userDiagram.html',datas = myData)
 
 @app.route('/gameDiagram')
@@ -147,34 +138,84 @@ def gameDiagram():
         i += 1
     return render_template('gameDiagram.html',datas = myData)
 
+@app.route('/userDataByGame')
+def userDataByGame():
+    total_users = s_plat_user.query.all()
+    played_users = s_plat_fightbfs.query.all()
+    myData = []
+    myData.append(["0", len(total_users) - len(played_users)])
+    for i in range(9):
+        myData.append([str(i+1), len(s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts)==i+1).all())])
+    users_10_19 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) >= 10).filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) <= 19 ).all()
+    users_20_29 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) >= 20).filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) <= 29 ).all()
+    users_10_30 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) >= 30).all()
+    myData.append(["10-19", len(users_10_19)])
+    myData.append(["20-29", len(users_20_29)])
+    myData.append(["30+", len(users_10_30)])
+    return render_template('userDataByGame.html', datas = myData)
+
 @app.route('/userDiagramByGame')
 def userDiagramByGame():
     total_users = s_plat_user.query.all()
     played_users = s_plat_fightbfs.query.all()
-    users_1 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts)==1).all()
-    users_2 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts)==2).all()
-    users_3 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) == 3).all()
-    users_4 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) == 4).all()
-    users_5 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) == 5).all()
-    users_6 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) == 6).all()
-    users_7 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) == 7).all()
-    users_8 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) == 8).all()
-    users_9 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) == 9).all()
-    users_10_19 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) >= 10).filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) <= 19 ).all()
-    users_20_29 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) >= 20).filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) <= 29 ).all()
+    myData = []
+    myData.append(["0", len(total_users) - len(played_users)])
+    for i in range(9):
+        myData.append([str(i + 1), len(
+            s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) == i + 1).all())])
+    users_10_19 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) >= 10).filter(
+        (s_plat_fightbfs.wins + s_plat_fightbfs.losts) <= 19).all()
+    users_20_29 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) >= 20).filter(
+        (s_plat_fightbfs.wins + s_plat_fightbfs.losts) <= 29).all()
     users_10_30 = s_plat_fightbfs.query.filter((s_plat_fightbfs.wins + s_plat_fightbfs.losts) >= 30).all()
-    myData=[]
-    myData.append(["0",len(total_users)-len(played_users)])
-    myData.append(["1", len(users_1)])
-    myData.append(["2", len(users_2)])
-    myData.append(["3", len(users_3)])
-    myData.append(["4", len(users_4)])
-    myData.append(["5", len(users_5)])
-    myData.append(["6", len(users_6)])
-    myData.append(["7", len(users_7)])
-    myData.append(["8", len(users_8)])
-    myData.append(["9", len(users_9)])
     myData.append(["10-19", len(users_10_19)])
     myData.append(["20-29", len(users_20_29)])
     myData.append(["30+", len(users_10_30)])
     return render_template('userDiagramByGame.html',datas = myData)
+
+@app.route('/periodAnalyseByDay')
+def periodAnalyseByDay():
+    return redirect(url_for('periodAnalyseByDayOrder', order=1))
+@app.route('/periodAnalyseByDay/<int:order>')
+def periodAnalyseByDayOrder(order):
+    secHour = 3600
+    firstDay = datetime(2017, 9, 9, 0, 0, 0)
+    firstDay = time.mktime(firstDay.timetuple())
+    toDay = time.time()
+    myData = periodAnalyse(start=firstDay, step=secHour, end=toDay, unit=24, order=order)
+    return render_template('testList.html', datas=myData)
+
+@app.route('/periodAnalyseByDayTotal')
+def periodAnalyseByDayTotal():
+    secHour = 3600
+    firstDay = datetime(2017, 9, 9, 0, 0, 0)
+    firstDay = time.mktime(firstDay.timetuple())
+    toDay = time.time()
+    myData = []
+    for order in range(24):
+        myData.append(periodAnalyse(start=firstDay, step=secHour, end=toDay, unit=24, order=order + 1, type=2))
+    return render_template('testList.html')
+
+@app.route('/periodAnalyseByWeek')
+def periodAnalyseByWeek():
+    return redirect(url_for('periodAnalyseByWeekOrder', order=1))
+@app.route('/periodAnalyseByWeek/<int:order>')
+def periodAnalyseByWeekOrder(order):
+    secDay = 24 * 3600
+    firstDay = datetime(2017, 9, 9, 0, 0, 0)
+    firstDay = time.mktime(firstDay.timetuple())
+    toDay = time.time()
+    myData = periodAnalyse(start=firstDay, step=secDay, end=toDay, unit=7, order=order)
+    return render_template('testDiagram.html',datas = myData)
+
+@app.route('/periodAnalyseByWeekTotal')
+def periodAnalyseByWeekTotal():
+    secDay = 24 * 3600
+    firstDay = datetime(2017, 9, 9, 0, 0, 0)
+    firstDay = time.mktime(firstDay.timetuple())
+    toDay = time.time()
+    myData = []
+    for order in range(7):
+        myData.append(periodAnalyse(start=firstDay, step=secDay, end=toDay, unit=7, order=order+1,type=2))
+    return render_template('testDiagram.html', datas=myData)
+
