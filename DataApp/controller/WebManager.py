@@ -94,6 +94,7 @@ def dayUpUserListPage(page):
         myData.append([firstDay + secDay * i, Num, Num - preNum])
         preNum = Num
         i += 1
+    myData.reverse()
     tol_item = len(myData)
     tol_page = int(math.ceil(tol_item / 20.0))
     cur_page = page
@@ -109,17 +110,25 @@ def userListByGamePage(page):
     tol_item = len(gdusers)
     tol_page = int(math.ceil(tol_item /10.0))
     cur_page = page
-    return render_template('userDataByGame.html', users=gdusers[10 * page - 10:10 * page], cur_page=cur_page, tol_page=tol_page, tol_user = tol_item)
+    return render_template('userListByGame.html', users=gdusers[10 * page - 10:10 * page], cur_page=cur_page, tol_page=tol_page, tol_user = tol_item)
 
 
 @app.route('/userDiagram')
 def userDiagram():
     secDay = 24 * 3600
-    firstDay = datetime(2017,9,9,0,0,0)
+    firstDay = datetime(2017, 9, 9, 0, 0, 0)
     firstDay = time.mktime(firstDay.timetuple())
     toDay = time.time()
-    myData = growthAnalyse(table=s_plat_user, time=s_plat_user.regTime, start=firstDay, step=secDay, end=toDay)
-    return render_template('userDiagram.html',datas = myData)
+    myData = []
+    preNum = 0
+    i = 0
+    while firstDay + secDay * i < toDay:
+        gdusers = s_plat_user.query.filter(s_plat_user.regTime < firstDay + secDay * (i + 1)).all()
+        Num = len(gdusers)
+        myData.append([firstDay + secDay * i, Num, Num - preNum])
+        preNum = Num
+        i += 1
+    return render_template('userDiagram.html', datas=myData)
 
 @app.route('/gameDiagram')
 def gameDiagram():
@@ -206,7 +215,7 @@ def periodAnalyseByWeekOrder(order):
     firstDay = time.mktime(firstDay.timetuple())
     toDay = time.time()
     myData = periodAnalyse(start=firstDay, step=secDay, end=toDay, unit=7, order=order)
-    return render_template('testDiagram.html',datas = myData)
+    return render_template('periodAnalyseByWeek.html',datas = myData,order = order)
 
 @app.route('/periodAnalyseByWeekTotal')
 def periodAnalyseByWeekTotal():
@@ -215,7 +224,7 @@ def periodAnalyseByWeekTotal():
     firstDay = time.mktime(firstDay.timetuple())
     toDay = time.time()
     myData = []
-    for order in range(7):
-        myData.append(periodAnalyse(start=firstDay, step=secDay, end=toDay, unit=7, order=order+1,type=2))
-    return render_template('testDiagram.html', datas=myData)
+    for i in range(7):
+        myData.append(periodAnalyse(start=firstDay, step=secDay, end=toDay, unit=7, order=i+1,type=2))
+    return render_template('periodAnalyseByWeekTotal.html', datas=myData)
 

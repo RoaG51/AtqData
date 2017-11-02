@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block son %}
+
+    <div class="admin-biaogelist">
+    <div class="listbiaoti am-cf">
+            <dl>
+                <a href="{{url_for('periodAnalyseByWeekOrder',order=3)}}">星期一</a>
+            </dl>
+            <dl>
+                <a href="{{url_for('periodAnalyseByWeekOrder',order=4)}}">星期二</a>
+            </dl>
+            <dl>
+                <a href="{{url_for('periodAnalyseByWeekOrder',order=5)}}">星期三</a>
+            </dl>
+            <dl>
+                <a href="{{url_for('periodAnalyseByWeekOrder',order=6)}}">星期四</a>
+            </dl>
+            <dl>
+                <a href="{{url_for('periodAnalyseByWeekOrder',order=7)}}">星期五</a>
+            </dl>
+            <dl>
+                <a href="{{url_for('periodAnalyseByWeekOrder',order=1)}}">星期六</a>
+            </dl>
+            <dl>
+                <a href="{{url_for('periodAnalyseByWeekOrder',order=2)}}">星期日</a>
+            </dl>
+        </div>
+    <div id="main" style="height:70%;width: 70%"></div>
+    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+    <script type="text/javascript">
+        weekString = ['未知星期','星期六','星期日','星期一','星期二','星期三','星期四','星期五']
+        var myChart = echarts.init(document.getElementById("main"));
+        var option = {
+            title : {
+                text : '古董局中局周同比数据-'+weekString[{{order}}],
+                subtext : '古董局中局APP数据支持'
+            },
+            tooltip : {
+                trigger: 'axis',
+                formatter : function (params) {
+                    var date = new Date(params.value[0]);
+                    data = date.getFullYear() + '-'
+                        + (date.getMonth() + 1) + '-'
+                        + date.getDate() + ' ';
+                    switch (date.getDay()) {
+                        case 0:
+                            data +='星期日';
+                            break;
+                        case 1:
+                            data +='星期一';
+                            break;
+                        case 2:
+                            data +='星期二';
+                            break;
+                        case 3:
+                            data +='星期三';
+                            break;
+                        case 4:
+                            data +='星期四';
+                            break;
+                        case 5:
+                            data +='星期五';
+                            break;
+                        case 6:
+                            data +='星期六';
+                            break;
+                        default:
+                            data +='未知星期';
+                        }
+                    return data + '<br/>'
+                        + params.value[1]
+                }
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            dataZoom: {
+                show: true,
+                start : 70
+            },
+            legend : {
+                data : ['新增用户','新增开局']
+            },
+            grid: {
+                y2: 80
+            },
+            xAxis : [
+                {
+                    type : 'time',
+                    splitNumber:10
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name: '新增用户',
+                    type: 'line',
+                    showAllSymbol: true,
+                    data: function () {
+                        var d = [];
+                        {% for data in datas %}
+                            d.push([
+                                new Date({{data[0]*1000}}),
+                                {{ data[1]}}
+                            ]);
+                        {% endfor %}
+                        return d;
+                    }()
+                },
+                {
+                    name: '新增开局',
+                    type: 'line',
+                    showAllSymbol: true,
+                    data: function () {
+                        var d = [];
+                        {% for data in datas %}
+                            d.push([
+                                new Date({{data[0]*1000}}),
+                                {{ data[2]}}
+                            ]);
+                        {% endfor %}
+                        return d;
+                    }()
+                }
+            ]
+        };
+        myChart.setOption(option);
+    </script>
+    </div>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block son %}
+
+    <div class="admin-biaogelist" id="main" style="height:70%;width: 70%"></div>
+    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById("main"));
+        var option = {
+            title : {
+                text : '古董局中局周叠加数据图',
+                subtext : '古董局中局APP数据支持'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            legend : {
+                data : ['新增用户','新增开局']
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['星期六','星期日','星期一','星期二','星期三','星期四','星期五']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            grid: {
+                y2: 80
+            },
+            series : [
+                {
+                    name: '新增用户',
+                    type: 'line',
+                    showAllSymbol: true,
+                    data: function () {
+                        var d = [];
+                        {% for data in datas %}
+                            d.push(
+                                {{ data[1]}}
+                            );
+                        {% endfor %}
+                        return d;
+                    }()
+                },
+                {
+                    name: '新增开局',
+                    type: 'line',
+                    showAllSymbol: true,
+                    data: function () {
+                          var d = [];
+                        {% for data in datas %}
+                              d.push(
+                                {{ data[2]}}
+                              );
+                          {% endfor %}
+                          return d;
+                      }()
+                }
+            ]
+        };
+        myChart.setOption(option);
+    </script>
+{% endblock %}
