@@ -3,10 +3,10 @@
     <div class="admin-biaogelist" >
         <div class="listbiaoti am-cf">
             <ul class="am-icon-flag on">
-                用户开局数量统计
+                用户性别统计
             </ul>
             <dl style="float: right;">
-                当前位置： <a class="am-icon-home" href="{{ url_for('show_index') }}">首页</a> > 用户开局数量统计
+                当前位置： <a class="am-icon-home" href="{{ url_for('show_index') }}">首页</a> > 用户性别统计
             </dl>
         </div>
         <div id="main" style="height:70%;width: 70%"></div>
@@ -15,7 +15,7 @@
             var myChart = echarts.init(document.getElementById('main'));
             option = {
                 title: {
-                    text: '用户开局数量统计',
+                    text: '用户性别统计',
                     left: 'center'
                 },
                 tooltip : {
@@ -27,7 +27,7 @@
                     // top: 'middle',
                     bottom: 10,
                     left: 'center',
-                    data: ['{{datas[0][0]}}', '{{datas[1][0]}}','{{datas[2][0]}}','{{datas[3][0]}}','{{datas[4][0]}}','{{datas[5][0]}}','{{datas[6][0]}}','{{datas[7][0]}}','{{datas[8][0]}}','{{datas[9][0]}}','{{datas[10][0]}}','{{datas[11][0]}}','{{datas[12][0]}}']
+                    data: ['{{datas[0][0]}}', '{{datas[1][0]}}','{{datas[2][0]}}']
                 },
                 series : [
                     {
@@ -38,17 +38,7 @@
                         data:[
                             {value:{{datas[0][1]}},name:'{{datas[0][0]}}'},
                             {value:{{datas[1][1]}},name:'{{datas[1][0]}}'},
-                            {value:{{datas[2][1]}},name:'{{datas[2][0]}}'},
-                            {value:{{datas[3][1]}},name:'{{datas[3][0]}}'},
-                            {value:{{datas[4][1]}},name:'{{datas[4][0]}}'},
-                            {value:{{datas[5][1]}},name:'{{datas[5][0]}}'},
-                            {value:{{datas[6][1]}},name:'{{datas[6][0]}}'},
-                            {value:{{datas[7][1]}},name:'{{datas[7][0]}}'},
-                            {value:{{datas[8][1]}},name:'{{datas[8][0]}}'},
-                            {value:{{datas[9][1]}},name:'{{datas[9][0]}}'},
-                            {value:{{datas[10][1]}},name:'{{datas[10][0]}}'},
-                            {value:{{datas[11][1]}},name:'{{datas[11][0]}}'},
-                            {value:{{datas[12][1]}},name:'{{datas[12][0]}}'}
+                            {value:{{datas[2][1]}},name:'{{datas[2][0]}}'}
 
                         ],
                         itemStyle: {

@@ -65,12 +65,15 @@
                 <li class="am-icon-line-chart"><a href="{{ url_for('userDiagram') }}">日增用户视图</a> </li>
                 <li class="am-icon-tasks"><a href="{{ url_for('userDataByGame') }}">用户局数列表</a> </li>
                 <li class="am-icon-pie-chart"><a href="{{ url_for('userDiagramByGame') }}">用户局数饼图</a> </li>
+                <li class="am-icon-pie-chart"><a href="{{ url_for('userDiagramBySex') }}">用户性别饼图</a> </li>
             </ul>
             <h3 class="am-icon-paper-plane-o"><em></em> <a href=""> 开局管理</a></h3>
             <ul>
                 <li class="am-icon-list"><a href="{{ url_for('gameList') }}">开局详情列表</a></li>
                 <li class="am-icon-user-plus"><a href="{{ url_for('dayUpGameList') }}">日增开局列表</a> </li>
                 <li class="am-icon-line-chart"><a href="{{ url_for('gameDiagram') }}">日增开局视图</a> </li>
+                <li class="am-icon-pie-chart"><a href="{{ url_for('gameDiagramByNum') }}">开局人数饼图</a> </li>
+                <li class="am-icon-pie-chart"><a href="{{ url_for('winrateDiagramByNum') }}">胜率人数饼图</a> </li>
             </ul>
             <h3 class="am-icon-paper-plane-o"><em></em> <a href=""> 周期统计</a></h3>
             <ul>

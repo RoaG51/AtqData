@@ -2,6 +2,7 @@
 from DataApp.model.s_plat_user import s_plat_user
 from DataApp.model.s_plat_fightbfs import s_plat_fightbfs
 from DataApp.model.s_plat_fightlog import s_plat_fightlog
+from DataApp.model.s_data_numbyday import s_data_numbyday
 from DataApp import app,db
 from flask import render_template,redirect,url_for
 from datetime import datetime
@@ -11,13 +12,14 @@ import time,math
 @app.route('/')
 def show_index():
     gdusers = s_plat_user.query.all()
-    wxusers = s_plat_user.query.filter(s_plat_user.wxid.like("player_%")).all()
+    gsusers = s_plat_user.query.filter(s_plat_user.wxid.like("player_%")).all()
+
     tol_user = len(gdusers)
-    tol_guest = len(wxusers)
+    tol_guest = len(gsusers)
     tol_wechat = tol_user - tol_guest
     gdgames = s_plat_fightlog.query.all()
     tol_game = len(gdgames)
-    return render_template('index.html',tol_user = tol_user,tol_wechat = tol_wechat, tol_guest = tol_guest , tol_game = tol_game)
+    return render_template('index.html',tol_user = tol_user,tol_wechat = tol_wechat, tol_guest = tol_guest , tol_game = tol_game )
 
 @app.route('/gameList')
 def gameList():
@@ -228,3 +230,50 @@ def periodAnalyseByWeekTotal():
         myData.append(periodAnalyse(start=firstDay, step=secDay, end=toDay, unit=7, order=i+1,type=2))
     return render_template('periodAnalyseByWeekTotal.html', datas=myData)
 
+@app.route('/userDiagramBySex')
+def userDiagramBySex():
+    wxmale = s_plat_user.query.filter(s_plat_user.wxid.like("o0%")).filter(s_plat_user.wxsex == 1).all()
+    wxfemale = s_plat_user.query.filter(s_plat_user.wxid.like("o0%")).filter(s_plat_user.wxsex == 2).all()
+    gsusers = s_plat_user.query.filter(s_plat_user.wxid.like("player_%")).all()
+    myData = []
+    myData.append([u"游客", len(gsusers)])
+    myData.append([u"男性注册用户", len(wxmale)])
+    myData.append([u"女性注册用户", len(wxfemale)])
+    return render_template('userDiagramBySex.html',datas = myData)
+
+@app.route('/gameDiagramByNum')
+def gameDiagramByNum():
+    game_6 = s_plat_fightlog.query.filter(s_plat_fightlog.u7 == None).all()
+    game_7 = s_plat_fightlog.query.filter(s_plat_fightlog.u7 != None).filter(s_plat_fightlog.u8 == None).all()
+    game_8 = s_plat_fightlog.query.filter(s_plat_fightlog.u8 != None).all()
+    myData = []
+    myData.append([u"6人局", len(game_6)])
+    myData.append([u"7人局", len(game_7)])
+    myData.append([u"8人局", len(game_8)])
+    return render_template('gameDiagramByNum.html',datas = myData)
+
+@app.route('/winrateDiagramByNum')
+def winrateDiagramByNum():
+    return redirect(url_for('winrateDiagramByNumPage', num=6))
+@app.route('/winrateDiagramByNum/<int:num>')
+def winrateDiagramByNumPage(num):
+    if num == 6:
+        xy = s_plat_fightlog.query.filter(s_plat_fightlog.u7 == None).filter(s_plat_fightlog.isHaoren == 1).all()
+        lcf = s_plat_fightlog.query.filter(s_plat_fightlog.u7 == None).filter(s_plat_fightlog.isHaoren == 0).all()
+        title = u"6人局"
+    elif num == 7:
+        xy = s_plat_fightlog.query.filter(s_plat_fightlog.u7 != None).filter(s_plat_fightlog.u8 == None).filter(s_plat_fightlog.isHaoren == 1).all()
+        lcf = s_plat_fightlog.query.filter(s_plat_fightlog.u7 != None).filter(s_plat_fightlog.u8 == None).filter(s_plat_fightlog.isHaoren == 0).all()
+        title = u"7人局"
+    elif num == 8:
+        xy = s_plat_fightlog.query.filter(s_plat_fightlog.u8 != None).filter(s_plat_fightlog.isHaoren == 1).all()
+        lcf = s_plat_fightlog.query.filter(s_plat_fightlog.u8 != None).filter(s_plat_fightlog.isHaoren == 0).all()
+        title = u"7人局"
+    else :
+        xy = s_plat_fightlog.query.filter(s_plat_fightlog.isHaoren == 1).all()
+        lcf = s_plat_fightlog.query.filter(s_plat_fightlog.isHaoren == 0).all()
+        title = u"全部局"
+    myData = []
+    myData.append([u"许愿阵营获胜", len(xy)])
+    myData.append([u"老朝奉阵营获胜", len(lcf)])
+    return render_template('winrateDiagramByNum.html', datas=myData, title = title)
