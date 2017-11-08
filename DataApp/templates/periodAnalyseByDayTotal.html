@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block dataactive %}
+    active
+{% endblock %}
+
+{% block datastyle %}
+    style="display:block"
+{% endblock %}
+
+{% block periodAnalyseByDayTotalactive %}
+    class="active"
+{% endblock %}
+
+{% block son %}
+    <div class="tpl-content-wrapper">
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    时间叠加数据
+                </div>
+            </div>
+            <div class="tpl-echarts tpl-chart-mb" id="main">
+                <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+                <script type="text/javascript">
+                    var myChart = echarts.init(document.getElementById("main"));
+                    var option = {
+                        tooltip : {
+                            trigger: 'axis'
+                        },
+                        toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: false},
+                    dataView : {show: false, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: false}
+                }
+            },
+            calculable : true,
+            legend : {
+                data : ['新增用户','新增开局']
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['0:00-1:00','1:00-2:00','2:00-3:00','3:00-4:00','4:00-5:00','5:00-6:00',
+                    '6:00-7:00','7:00-8:00','8:00-9:00','9:00-10:00','10:00-11:00','11:00-12:00',
+                    '12:00-13:00','13:00-14:00','14:00-15:00','15:00-16:00','16:00-17:00','17:00-18:00',
+                    '18:00-19:00','19:00-20:00','20:00-21:00','21:00-22:00','22:00-23:00','23:00-0:00']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            grid: {
+                y2: 80
+            },
+            series : [
+                {
+                    name: '新增用户',
+                    type: 'line',
+                    showAllSymbol: true,
+                    data: function () {
+                        var d = [];
+                        {% for data in datas %}
+                            d.push(
+                                {{ data[1]}}
+                            );
+                        {% endfor %}
+                        return d;
+                    }()
+                },
+                {
+                    name: '新增开局',
+                    type: 'line',
+                    showAllSymbol: true,
+                    data: function () {
+                          var d = [];
+                        {% for data in datas %}
+                              d.push(
+                                {{ data[2]}}
+                              );
+                          {% endfor %}
+                          return d;
+                      }()
+                }
+            ]
+        };
+                    myChart.setOption(option);
+                </script>
+            </div>
+        </div>
+    </div>
+{% endblock %}

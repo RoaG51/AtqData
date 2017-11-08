@@ -11,8 +11,13 @@ import time,math
 
 
 
+
 @app.route('/')
 def show_index():
+    refreshLocalDb()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
+    myData.reverse()
+
     gdusers = s_plat_user.query.all()
     gsusers = s_plat_user.query.filter(s_plat_user.wxid.like("player_%")).all()
 
@@ -21,7 +26,7 @@ def show_index():
     tol_wechat = tol_user - tol_guest
     gdgames = s_plat_fightlog.query.all()
     tol_game = len(gdgames)
-    return render_template('index.html',tol_user = tol_user,tol_wechat = tol_wechat, tol_guest = tol_guest , tol_game = tol_game )
+    return render_template('index.html',tol_user = tol_user,tol_wechat = tol_wechat, tol_guest = tol_guest , tol_game = tol_game,datas = myData[0:5] )
 
 
 @app.route('/gameList')
@@ -157,14 +162,15 @@ def periodAnalyseByDayOrder(order):
 
 @app.route('/periodAnalyseByDayTotal')
 def periodAnalyseByDayTotal():
-    secHour = 3600
-    firstDay = datetime(2017, 9, 9, 0, 0, 0)
-    firstDay = time.mktime(firstDay.timetuple())
-    toDay = time.time()
+    firstDay = time.mktime(datetime(2017, 9, 9, 0, 0, 0).timetuple())
     myData = []
     for order in range(24):
-        myData.append(periodAnalyse(start=firstDay, step=secHour, end=toDay, unit=24, order=order + 1, type=2))
-    return render_template('testList.html')
+        users = s_plat_user.query.filter(((s_plat_user.regTime - firstDay) / 3600.0) % 24 > order).filter(
+            ((s_plat_user.regTime - firstDay) / 3600.0) % 24 < order+1).all()
+        games = s_plat_fightlog.query.filter(((s_plat_fightlog.logTime - firstDay) / 3600.0) % 24 > order).filter(
+            ((s_plat_fightlog.logTime - firstDay) / 3600.0) % 24 < order+1).all()
+        myData.append([order,len(users),len(games)])
+    return render_template('periodAnalyseByDayTotal.html',datas=myData)
 
 @app.route('/periodAnalyseByWeek')
 def periodAnalyseByWeek():

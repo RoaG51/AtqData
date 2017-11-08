@@ -84,21 +84,47 @@ active
                                 <th class="am-text-center">星期</th>
                                 <th class="am-text-center">新增</th>
                             </tr>
+                             {% for data in datas %}
                             <tr>
-                                <td class="am-text-center">昨天</td>
-                                <td class="am-text-center">星期一</td>
-                                <td class="am-text-center">999</td>
+                                <td class="am-text-center">
+                                    <script type="text/javascript">
+                                    var unixTimestamp = new Date({{ data.time }}*1000);
+                                    document.write(unixTimestamp.toLocaleString());</script>
+                                </td>
+                                <td class="am-text-center">
+                                     <script type="text/javascript">
+                                     var unixTimestamp = new Date({{ data.time }}*1000);
+                                     Day = unixTimestamp.getDay()
+                                     switch (Day) {
+                                         case 0:
+                                             document.write('星期日');
+                                             break;
+                                         case 1:
+                                             document.write('星期一');
+                                             break;
+                                         case 2:
+                                             document.write('星期二');
+                                             break;
+                                         case 3:
+                                             document.write('星期三');
+                                             break;
+                                         case 4:
+                                             document.write('星期四');
+                                             break;
+                                         case 5:
+                                             document.write('星期五');
+                                             break;
+                                         case 6:
+                                             document.write('星期六');
+                                             break;
+                                         default:
+                                             document.write('未知星期');
+                                     }
+                                    </script>
+                                </td>
+                                <td class="am-text-center">{{data.usernum}}</td>
                             </tr>
-                            <tr>
-                                <td class="am-text-center">今天</td>
-                                <td class="am-text-center">星期二</td>
-                                <td class="am-text-center">999</td>
-                            </tr>
-                            <tr>
-                                <td class="am-text-center">明天</td>
-                                <td class="am-text-center">星期三</td>
-                                <td class="am-text-center">999</td>
-                            </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -117,21 +143,47 @@ active
                                 <th class="am-text-center">星期</th>
                                 <th class="am-text-center">新开</th>
                             </tr>
+                            {% for data in datas %}
                             <tr>
-                                <td class="am-text-center">昨天</td>
-                                <td class="am-text-center">星期一</td>
-                                <td class="am-text-center">100</td>
+                                <td class="am-text-center">
+                                    <script type="text/javascript">
+                                    var unixTimestamp = new Date({{ data.time }}*1000);
+                                    document.write(unixTimestamp.toLocaleString());</script>
+                                </td>
+                                <td class="am-text-center">
+                                     <script type="text/javascript">
+                                     var unixTimestamp = new Date({{ data.time }}*1000);
+                                     Day = unixTimestamp.getDay()
+                                     switch (Day) {
+                                         case 0:
+                                             document.write('星期日');
+                                             break;
+                                         case 1:
+                                             document.write('星期一');
+                                             break;
+                                         case 2:
+                                             document.write('星期二');
+                                             break;
+                                         case 3:
+                                             document.write('星期三');
+                                             break;
+                                         case 4:
+                                             document.write('星期四');
+                                             break;
+                                         case 5:
+                                             document.write('星期五');
+                                             break;
+                                         case 6:
+                                             document.write('星期六');
+                                             break;
+                                         default:
+                                             document.write('未知星期');
+                                     }
+                                    </script>
+                                </td>
+                                <td class="am-text-center">{{data.gamenum}}</td>
                             </tr>
-                            <tr>
-                                <td class="am-text-center">今天</td>
-                                <td class="am-text-center">星期二</td>
-                                <td class="am-text-center">100</td>
-                            </tr>
-                            <tr>
-                                <td class="am-text-center">明天</td>
-                                <td class="am-text-center">星期三</td>
-                                <td class="am-text-center">100</td>
-                            </tr>
+                            {% endfor %}
                             </tbody>
                         </table>
                     </div>
