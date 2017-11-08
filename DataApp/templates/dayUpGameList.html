@@ -23,11 +23,11 @@
                 {% for game in games %}
                     <tr>
                         <td><script type="text/javascript">
-                            var unixTimestamp = new Date({{ game[0] }}*1000);
+                            var unixTimestamp = new Date({{ game.time }}*1000);
                             document.write(unixTimestamp.toLocaleDateString());</script></td>
                         <td class="am-text-center am-text-middle">
                             <script type="text/javascript">
-                                var unixTimestamp = new Date({{ game[0] }}*1000);
+                                var unixTimestamp = new Date({{ game.time }}*1000);
                                 Day = unixTimestamp.getDay()
                                 switch (Day) {
                                     case 0:
@@ -56,8 +56,8 @@
                                 }
                             </script>
                         </td>
-                        <td>{{ game[2] }}</td>
-                        <td>{{ game[1] }}</td>
+                        <td>{{ game.gamenum }}</td>
+                        <td>{{ game.gametolnum }}</td>
                     </tr>
                 {% endfor %}
             </table>

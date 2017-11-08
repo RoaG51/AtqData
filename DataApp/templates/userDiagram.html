@@ -88,8 +88,8 @@
                     var d = [];
                     {% for data in datas %}
                         d.push([
-                            new Date({{data[0]*1000}}),
-                            {{ data[2]}}
+                            new Date({{data.time*1000}}),
+                            {{ data.usernum}}
                         ]);
                     {% endfor %}
                     return d;
@@ -103,8 +103,8 @@
                     var d = [];
                     {% for data in datas %}
                         d.push([
-                            new Date({{data[0]*1000}}),
-                            {{ data[1]}}
+                            new Date({{data.time*1000}}),
+                            {{ data.usertolnum}}
                         ]);
                     {% endfor %}
                     return d;

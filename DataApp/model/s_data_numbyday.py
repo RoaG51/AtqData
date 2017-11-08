@@ -13,8 +13,7 @@ class s_data_numbyday(db.Model):
 
 
 
-    def __init__(self, id,time,usernum,usertolnum,gamenum,gametolnum):
-        self.id = id
+    def __init__(self, time,usernum,usertolnum,gamenum,gametolnum):
         self.time = time
         self.usernum = usernum
         self.usertolnum = usertolnum

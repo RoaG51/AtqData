@@ -6,8 +6,10 @@ from DataApp.model.s_data_numbyday import s_data_numbyday
 from DataApp import app,db
 from flask import render_template,redirect,url_for
 from datetime import datetime
-from innerFunctions import periodAnalyse
+from innerFunctions import periodAnalyse,refreshLocalDb
 import time,math
+
+
 
 @app.route('/')
 def show_index():
@@ -20,6 +22,7 @@ def show_index():
     gdgames = s_plat_fightlog.query.all()
     tol_game = len(gdgames)
     return render_template('index.html',tol_user = tol_user,tol_wechat = tol_wechat, tol_guest = tol_guest , tol_game = tol_game )
+
 
 @app.route('/gameList')
 def gameList():
@@ -59,19 +62,8 @@ def dayUpGameList():
     return redirect(url_for('dayUpGameListPage',page=1))
 @app.route('/dayUpGameList/<int:page>')
 def dayUpGameListPage(page):
-    secDay = 24 * 3600
-    firstDay = datetime(2017, 9, 9, 0, 0, 0)
-    firstDay = time.mktime(firstDay.timetuple())
-    toDay = time.time()
-    myData = []
-    preNum = 0
-    i = 0
-    while firstDay + secDay * i < toDay:
-        gdusers = s_plat_fightlog.query.filter(s_plat_fightlog.logTime < firstDay + secDay * (i + 1)).all()
-        Num = len(gdusers)
-        myData.append([firstDay + secDay * i, Num, Num - preNum])
-        preNum = Num
-        i += 1
+    refreshLocalDb()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     myData.reverse()
     tol_item = len(myData)
     tol_page = int(math.ceil(tol_item / 20.0))
@@ -83,19 +75,8 @@ def dayUpUserList():
     return redirect(url_for('dayUpUserListPage',page=1))
 @app.route('/dayUpUserList/<int:page>')
 def dayUpUserListPage(page):
-    secDay = 24 * 3600
-    firstDay = datetime(2017, 9, 9, 0, 0, 0)
-    firstDay = time.mktime(firstDay.timetuple())
-    toDay = time.time()
-    myData = []
-    preNum = 0
-    i = 0
-    while firstDay + secDay * i < toDay:
-        gdusers = s_plat_user.query.filter(s_plat_user.regTime < firstDay + secDay * (i + 1)).all()
-        Num = len(gdusers)
-        myData.append([firstDay + secDay * i, Num, Num - preNum])
-        preNum = Num
-        i += 1
+    refreshLocalDb()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     myData.reverse()
     tol_item = len(myData)
     tol_page = int(math.ceil(tol_item / 20.0))
@@ -117,36 +98,14 @@ def userListByGamePage(page):
 
 @app.route('/userDiagram')
 def userDiagram():
-    secDay = 24 * 3600
-    firstDay = datetime(2017, 9, 9, 0, 0, 0)
-    firstDay = time.mktime(firstDay.timetuple())
-    toDay = time.time()
-    myData = []
-    preNum = 0
-    i = 0
-    while firstDay + secDay * i < toDay:
-        gdusers = s_plat_user.query.filter(s_plat_user.regTime < firstDay + secDay * (i + 1)).all()
-        Num = len(gdusers)
-        myData.append([firstDay + secDay * i, Num, Num - preNum])
-        preNum = Num
-        i += 1
+    refreshLocalDb()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     return render_template('userDiagram.html', datas=myData)
 
 @app.route('/gameDiagram')
 def gameDiagram():
-    secDay = 24 * 3600
-    firstDay = datetime(2017,9,9,0,0,0)
-    firstDay = time.mktime(firstDay.timetuple())
-    toDay = time.time()
-    myData=[]
-    preNum = 0
-    i =0
-    while firstDay+secDay*i < toDay:
-        gdusers = s_plat_fightlog.query.filter(s_plat_fightlog.logTime <firstDay+secDay*(i+1)).all()
-        Num = len(gdusers)
-        myData.append([firstDay+secDay*i,Num,Num-preNum])
-        preNum = Num
-        i += 1
+    refreshLocalDb()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     return render_template('gameDiagram.html',datas = myData)
 
 @app.route('/userDataByGame')

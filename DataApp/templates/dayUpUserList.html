@@ -23,11 +23,11 @@
                 {% for user in users %}
                     <tr>
                     <td><script type="text/javascript">
-                        var unixTimestamp = new Date({{ user[0] }}*1000);
+                        var unixTimestamp = new Date({{ user.time }}*1000);
                         document.write(unixTimestamp.toLocaleDateString());</script></td>
                     <td class="am-text-center am-text-middle">
                         <script type="text/javascript">
-                            var unixTimestamp = new Date({{ user[0] }}*1000);
+                            var unixTimestamp = new Date({{ user.time }}*1000);
                             Day = unixTimestamp.getDay()
                             switch (Day) {
                                 case 0:
@@ -56,8 +56,8 @@
                             }
                         </script>
                     </td>
-                    <td>{{ user[2] }}</td>
-                    <td>{{ user[1] }}</td>
+                    <td>{{ user.usernum }}</td>
+                    <td>{{ user.usertolnum }}</td>
                 {% endfor %}
                 </tbody>
             </table>
