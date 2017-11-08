@@ -1,14 +1,23 @@
 {% extends "base.html" %}
+{% block gameactive %}
+active
+{% endblock %}
+{% block gamestyle %}
+style="display:block"
+{% endblock %}
+{% block gameListactive %}
+class="active"
+{% endblock %}
 {% block son %}
-    <div class="admin-biaogelist" >
-        <div class="listbiaoti am-cf">
-            <ul class="am-icon-flag on">
-                开局列表管理
-            </ul>
-            <dl style="float: right;">
-                当前位置： <a class="am-icon-home" href="{{ url_for('show_index') }}">首页</a> > 开局列表
-            </dl>
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+            欢迎管理员
         </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{{ url_for('show_index') }}" class="am-icon-home">首页</a></li>
+            <li><i class="am-icon-paper-plane-o">开局管理</i></li>
+            <li>开局详细列表</li>
+        </ol>
         <form class="am-form am-g">
             <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped am-table-hover">
                 <thead>
@@ -17,7 +26,7 @@
                     <th class="table-type am-text-center">游戏人数</th>
                     <th class="table-type am-text-center">获胜阵营</th>
                     <th class="table-type am-text-center">开局时间</th>
-                    <th class="table-date am-hide-sm-only am-text-center">开局星期</th>
+                    <th class="table-date am-text-center">开局星期</th>
                 </tr>
                 </thead>
                 <tbody id="tablelsw" class="am-text-center">
@@ -90,13 +99,5 @@
             </ul>
             <hr />
         </form>
-        <div class="foods">
-            <ul>
-                版权所有@2017. 盒中闪电出品
-            </ul>
-            <dl>
-                <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
-            </dl>
-        </div>
     </div>
 {% endblock %}

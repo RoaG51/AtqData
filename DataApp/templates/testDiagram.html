@@ -1,14 +1,10 @@
 {% extends "base.html" %}
 {% block son %}
-    <div class="admin-biaogelist" id="main" style="height:70%;width: 70%"></div>
-    <script src=../static/assets/js/echarts.js"></script>
+    <div class="tpl-content-wrapper" id="main" style="height:70%;width: 70%"></div>
+    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
     <script type="text/javascript">
         var myChart = echarts.init(document.getElementById("main"));
         var option = {
-            title : {
-                text : '古董局中局数据图',
-                subtext : '古董局中局APP数据支持'
-            },
             tooltip : {
                 trigger: 'axis',
                 formatter : function (params) {
@@ -40,7 +36,7 @@
                             break;
                         default:
                             data +='未知星期';
-                        }
+                    }
                     return data + '<br/>'
                         + params.value[1]
                 }
@@ -48,11 +44,11 @@
             toolbox: {
                 show : true,
                 feature : {
-                    mark : {show: true},
-                    dataView : {show: true, readOnly: false},
+                    mark : {show: false},
+                    dataView : {show: false, readOnly: false},
                     magicType : {show: true, type: ['line', 'bar']},
                     restore : {show: true},
-                    saveAsImage : {show: true}
+                    saveAsImage : {show: false}
                 }
             },
             calculable : true,

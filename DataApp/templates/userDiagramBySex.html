@@ -1,20 +1,27 @@
 {% extends "base.html" %}
+{% block useractive %}
+active
+{% endblock %}
+{% block userstyle %}
+style="display:block"
+{% endblock %}
+{% block userDiagramBySexactive %}
+class="active"
+{% endblock %}
 {% block son %}
-    <div class="admin-biaogelist" >
-        <div class="listbiaoti am-cf">
-            <ul class="am-icon-flag on">
-                用户性别统计
-            </ul>
-            <dl style="float: right;">
-                当前位置： <a class="am-icon-home" href="{{ url_for('show_index') }}">首页</a> > 用户性别统计
-            </dl>
-        </div>
-        <div id="main" style="height:70%;width: 70%"></div>
-        <script src="../static/assets/js/echarts.js"></script>
-        <script type="text/javascript">
-            var myChart = echarts.init(document.getElementById('main'));
-            option = {
-                title: {
+    <div class="tpl-content-wrapper">
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    用户性别饼图
+                </div>
+            </div>
+            <div class="tpl-echarts tpl-chart-mb" id="main">
+                <script src="../static/assets/js/echarts.js"></script>
+                <script type="text/javascript">
+                    var myChart = echarts.init(document.getElementById('main'));
+                    option = {
+                        title: {
                     text: '用户性别统计',
                     left: 'center'
                 },
@@ -51,7 +58,9 @@
                     }
                 ]
             };
-            myChart.setOption(option);
-        </script>
+                    myChart.setOption(option);
+                </script>
+            </div>
+        </div>
     </div>
 {% endblock %}

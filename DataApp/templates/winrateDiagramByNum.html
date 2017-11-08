@@ -1,32 +1,32 @@
 {% extends "base.html" %}
+{% block gameactive %}
+active
+{% endblock %}
+{% block gamestyle %}
+style="display:block"
+{% endblock %}
+{% block winrateDiagramByNumactive %}
+class="active"
+{% endblock %}
 {% block son %}
-    <div class="admin-biaogelist" >
-
-        <div class="listbiaoti am-cf">
-            <ul class="am-icon-flag on">
-                {{title}}胜率统计统计
-            </ul>
-            <dl>
-                <a href="{{url_for('winrateDiagramByNumPage',num=6)}}">6人局</a>
-            </dl>
-            <dl>
-                <a href="{{url_for('winrateDiagramByNumPage',num=7)}}">7人局</a>
-            </dl>
-            <dl>
-                <a href="{{url_for('winrateDiagramByNumPage',num=8)}}">8人局</a>
-            </dl>
-            <dl>
-                <a href="{{url_for('winrateDiagramByNumPage',num=0)}}">全部局</a>
-            </dl>
-            <dl style="float: right;">
-                当前位置： <a class="am-icon-home" href="{{ url_for('show_index') }}">首页</a> > {{title}}胜率统计统计
-            </dl>
-        </div>
-        <div id="main" style="height:70%;width: 70%"></div>
-        <script src="../static/assets/js/echarts.js"></script>
-        <script type="text/javascript">
-            var myChart = echarts.init(document.getElementById('main'));
-            option = {
+    <div class="tpl-content-wrapper">
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    {{title}}胜率统计统计
+                </div>
+                <div style="float: right">
+                    <a href="{{url_for('winrateDiagramByNumPage',num=6)}}">6人局</a>
+                    <a href="{{url_for('winrateDiagramByNumPage',num=7)}}">7人局</a>
+                    <a href="{{url_for('winrateDiagramByNumPage',num=8)}}">8人局</a>
+                    <a href="{{url_for('winrateDiagramByNumPage',num=0)}}">全部局</a>
+                </div>
+            </div>
+            <div class="tpl-echarts tpl-chart-mb" id="main">
+                <script src="../static/assets/js/echarts.js"></script>
+                <script type="text/javascript">
+                    var myChart = echarts.init(document.getElementById('main'));
+                    option = {
                 title: {
                     text: '{{title}}胜率统计统计',
                     left: 'center'
@@ -63,7 +63,9 @@
                     }
                 ]
             };
-            myChart.setOption(option);
-        </script>
+                    myChart.setOption(option);
+                </script>
+            </div>
+        </div>
     </div>
 {% endblock %}

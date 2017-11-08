@@ -1,118 +1,130 @@
 {% extends "base.html" %}
+{% block useractive %}
+active
+{% endblock %}
+{% block userstyle %}
+style="display:block"
+{% endblock %}
+{% block userDiagramactive %}
+class="active"
+{% endblock %}
 {% block son %}
-    <div class="admin-biaogelist" id="main" style="height:70%;width: 70%"></div>
-    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
-    <script type="text/javascript">
-        // 基于准备好的dom，初始化echarts图表
-        var myChart = echarts.init(document.getElementById("main"));
-        var option = {
-        title : {
-            text : '古董局中局数据图',
-            subtext : '古董局中局APP数据支持'
-        },
-        tooltip : {
-            trigger: 'axis',
-            formatter : function (params) {
-                var date = new Date(params.value[0]);
-                data = date.getFullYear() + '-'
-                       + (date.getMonth() + 1) + '-'
-                       + date.getDate() + ' ';
-                switch (date.getDay()) {
-                    case 0:
-                        data +='星期日';
-                        break;
-                    case 1:
-                        data +='星期一';
-                        break;
-                    case 2:
-                        data +='星期二';
-                        break;
-                    case 3:
-                        data +='星期三';
-                        break;
-                    case 4:
-                        data +='星期四';
-                        break;
-                    case 5:
-                        data +='星期五';
-                        break;
-                    case 6:
-                        data +='星期六';
-                        break;
-                    default:
-                        data +='未知星期';
-                }
-                return data + '<br/>'
-                       + params.value[1]
-            }
-        },
-
-        toolbox: {
-            show : true,
-            feature : {
-                mark : {show: true},
-                dataView : {show: true, readOnly: false},
-                magicType : {show: true, type: ['line', 'bar']},
-                restore : {show: true},
-                saveAsImage : {show: true}
-            }
-        },
-        calculable : true,
-        dataZoom: {
-            show: true,
-            start : 70
-        },
-        legend : {
-            data : ['新增用户','总用户数']
-        },
-        grid: {
-            y2: 80
-        },
-        xAxis : [
-            {
-                type : 'time',
-                splitNumber:10
-            }
-        ],
-        yAxis : [
-            {
-                type : 'value'
-            }
-        ],
-        series : [
-            {
-                name: '新增用户',
-                type: 'line',
-                showAllSymbol: true,
-                data: function () {
-                    var d = [];
-                    {% for data in datas %}
-                        d.push([
-                            new Date({{data.time*1000}}),
-                            {{ data.usernum}}
-                        ]);
-                    {% endfor %}
-                    return d;
-                }()
-            },
-             {
-                name: '总用户数',
-                type: 'line',
-                showAllSymbol: true,
-                data: function () {
-                    var d = [];
-                    {% for data in datas %}
-                        d.push([
-                            new Date({{data.time*1000}}),
-                            {{ data.usertolnum}}
-                        ]);
-                    {% endfor %}
-                    return d;
-                }()
-        }
-        ]
-    };
-        // 为echarts对象加载数据
-        myChart.setOption(option);
-    </script>
+    <div class="tpl-content-wrapper">
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    日增用户视图
+                </div>
+            </div>
+            <div class="tpl-echarts tpl-chart-mb" id="main">
+                <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+                <script type="text/javascript">
+                    var myChart = echarts.init(document.getElementById("main"));
+                    var option = {
+                        tooltip : {
+                            trigger: 'axis',
+                            formatter : function (params) {
+                                var date = new Date(params.value[0]);
+                                data = date.getFullYear() + '-'
+                                       + (date.getMonth() + 1) + '-'
+                                       + date.getDate() + ' ';
+                                switch (date.getDay()) {
+                                    case 0:
+                                        data +='星期日';
+                                        break;
+                                    case 1:
+                                        data +='星期一';
+                                        break;
+                                    case 2:
+                                        data +='星期二';
+                                        break;
+                                    case 3:
+                                        data +='星期三';
+                                        break;
+                                    case 4:
+                                        data +='星期四';
+                                        break;
+                                    case 5:
+                                        data +='星期五';
+                                        break;
+                                    case 6:
+                                        data +='星期六';
+                                        break;
+                                    default:
+                                        data +='未知星期';
+                                }
+                                return data + '<br/>'
+                                       + params.value[1]
+                            }
+                        },
+                        toolbox: {
+                            show : true,
+                            feature : {
+                                mark : {show: false},
+                                dataView : {show: false, readOnly: false},
+                                magicType : {show: true, type: ['line', 'bar']},
+                                restore : {show: true},
+                                saveAsImage : {show: false}
+                            }
+                        },
+                        calculable : true,
+                        dataZoom: {
+                            show: true,
+                            start : 70
+                        },
+                        legend : {
+                            data : ['新增用户','总用户数']
+                        },
+                        grid: {
+                            y2: 80
+                        },
+                        xAxis : [
+                            {
+                                type : 'time',
+                                splitNumber:10
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value'
+                            }
+                        ],
+                        series : [
+                            {
+                                name: '新增用户',
+                                type: 'line',
+                                showAllSymbol: true,
+                                data: function () {
+                                    var d = [];
+                                    {% for data in datas %}
+                                        d.push([
+                                            new Date({{data.time*1000}}),
+                                            {{ data.usernum}}
+                                        ]);
+                                    {% endfor %}
+                                    return d;
+                                }()
+                            },
+                            {
+                                name: '总用户数',
+                                type: 'line',
+                                showAllSymbol: true,
+                                data: function () {
+                                    var d = [];
+                                    {% for data in datas %}
+                                        d.push([
+                                            new Date({{data.time*1000}}),
+                                            {{ data.usertolnum}}
+                                        ]);
+                                    {% endfor %}
+                                    return d;
+                                }()
+                            }
+                        ],
+                    };
+                    myChart.setOption(option);
+                </script>
+            </div>
+        </div>
+    </div>
 {% endblock %}

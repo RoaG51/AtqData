@@ -1,14 +1,23 @@
 {% extends "base.html" %}
+{% block dataactive %}
+active
+{% endblock %}
+{% block datastyle %}
+style="display:block"
+{% endblock %}
+{% block periodAnalyseByDayactive %}
+class="active"
+{% endblock %}
 {% block son %}
-    <div class="admin-biaogelist" >
-        <div class="listbiaoti am-cf">
-            <ul class="am-icon-flag on">
-                用户局数管理
-            </ul>
-            <dl style="float: right;">
-                当前位置： <a class="am-icon-home" href="{{ url_for('show_index') }}">首页</a> > 用户局数
-            </dl>
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+            欢迎管理员
         </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{{ url_for('show_index') }}" class="am-icon-home">首页</a></li>
+            <li><i class="am-icon-line-chart">周期统计</i></li>
+            <li>单日同比数据</li>
+        </ol>
         <form class="am-form am-g">
             <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped am-table-hover ">
                 <thead>
@@ -34,13 +43,5 @@
             </table>
             <hr />
         </form>
-        <div class="foods">
-            <ul>
-                版权所有@2017. 盒中闪电出品
-            </ul>
-            <dl>
-                <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
-            </dl>
-        </div>
     </div>
 {% endblock %}

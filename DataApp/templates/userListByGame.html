@@ -1,108 +1,104 @@
 {% extends "base.html" %}
+{% block useractive %}
+active
+{% endblock %}
+{% block userstyle %}
+style="display:block"
+{% endblock %}
+{% block userListactive %}
+class="active"
+{% endblock %}
 {% block son %}
-   <div class="admin-biaogelist">
-      <div class="listbiaoti am-cf">
-        <ul class="am-icon-flag on">
-          用户列表管理
-        </ul>
-        <dl class="am-icon-home" style="float: right;">
-          当前位置： <a href="{{ url_for('show_index') }}">首页</a> > 用户列表
-        </dl>
-
-      </div>
-      <form class="am-form am-g">
-        <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped am-table-hover ">
-          <thead>
-            <tr class="am-success ">
-<!--              <th class="table-check"><input type="checkbox" /></th>
-              <th class="table-id">排序</th>  -->
-              <th class="table-id am-text-center">ID</th>
-              <th class="table-title am-text-center">姓名</th>
-              <th class="table-title am-text-center">头像</th>
-              <th class="table-title am-text-center">性别</th>
-              <th class="table-date am-hide-sm-only am-text-center">注册时间</th>
-              <th class="table-title am-text-center">注册星期</th>
-              <th class="table-ip am-text-center">注册IP</th>
-              <th class="table-title am-text-center">
-                  <a href="{{ url_for('userList') }}">总开局数</a>
-              </th>
-<!--              <th width="163px" class="table-set">操作</th>  -->
-            </tr>
-          </thead>
-          <tbody id="tablelsw" class="am-text-center am-text-middle">
-    {% for user in users %}
-     <tr>
-	<td class="am-text-center am-text-middle">{{user.user.id}}</td>
-    <td class="am-text-center am-text-middle"><script type="text/javascript">document.write(decodeURIComponent('{{user.user.name}}'));</script></td>
-    <td class="am-text-center am-text-middle"><img src = {{user.user.wxhead}} style = 'width:60px;height:60px'></img></td>
-	<td class="am-text-center am-text-middle">
-        <script type="text/javascript">
-        if({{user.user.wxsex}}==1)
-        document.write('男');
-        else
-        document.write('女');
-        </script>
-    </td>
-    <td class="am-text-center am-text-middle">
-        <script type="text/javascript">
-        var unixTimestamp = new Date({{user.user.regTime}}*1000);
-        document.write(unixTimestamp.toLocaleString());</script>
-    </td>
-    <td class="am-text-center am-text-middle">
-        <script type="text/javascript">
-            var unixTimestamp = new Date({{user.user.regTime}}*1000);
-            Day = unixTimestamp.getDay()
-            switch (Day) {
-                case 0:
-                    document.write('星期日');
-                    break;
-                case 1:
-                    document.write('星期一');
-                    break;
-                case 2:
-                    document.write('星期二');
-                    break;
-                case 3:
-                    document.write('星期三');
-                    break;
-                case 4:
-                    document.write('星期四');
-                    break;
-                case 5:
-                    document.write('星期五');
-                    break;
-                case 6:
-                    document.write('星期六');
-                    break;
-                default:
-                    document.write('未知星期');
-            }
-        </script>
-    <td class="am-text-center am-text-middle">{{ user.user.regIp}}</td>
-    <td class="am-text-center am-text-middle">{{ user.wins + user.losts}}</td>
-	</tr>
-  {% endfor %}
-          </tbody>
-        </table>
-
-        <ul class="am-pagination am-fr">
-          总用户数：{{tol_user}}
-          <li><a href="{{url_for('userListByGamePage',page=1)}}">首页</a></li>
-          <li><a href="{{url_for('userListByGamePage',page=(1 if cur_page==1 else cur_page-1))}}">上一页</a></li>
-          <li><a href="{{url_for('userListByGamePage',page=(tol_page if cur_page==tol_page else cur_page+1))}}">下一页</a></li>
-          <li><a href="{{url_for('userListByGamePage',page=tol_page)}}">末页</a></li>
-          第<span>{{ cur_page }}</span>页/共<span>{{ tol_page }}</span>页
-        </ul>
-        <hr />
-      </form>
-
-      <div class="foods">
-        <ul>
-          版权所有@2017. 盒中闪电出品
-        </ul>
-        <dl>
-          <a href="" title="返回头部" class="am-icon-btn am-icon-arrow-up"></a>
-        </dl>
-      </div>
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+            欢迎管理员
+        </div>
+        <ol class="am-breadcrumb">
+            <li><a href="{{ url_for('show_index') }}" class="am-icon-home">首页</a></li>
+            <li><i class="am-icon-users">用户管理</i></li>
+            <li>用户详细列表</li>
+        </ol>
+        <form class="am-form am-g">
+            <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped am-table-hover ">
+                <thead>
+                <tr class="am-success ">
+                    <th class="table-id am-text-center">ID</th>
+                    <th class="table-title am-text-center">姓名</th>
+                    <th class="table-title am-text-center">头像</th>
+                    <th class="table-title am-text-center">性别</th>
+                    <th class="table-title am-text-center">注册时间</th>
+                    <th class="table-title am-text-center">注册星期</th>
+                    <th class="table-title am-text-center">注册IP</th>
+                    <th class="table-title am-text-center">
+                        <a href="{{ url_for('userList') }}">总开局数</a>
+                    </th>
+                </tr>
+                </thead>
+                <tbody id="tablelsw" class="am-text-center am-text-middle">
+                {% for user in users %}
+                    <tr>
+                        <td class="am-text-center am-text-middle">{{user.user.id}}</td>
+                        <td class="am-text-center am-text-middle"><script type="text/javascript">document.write(decodeURIComponent('{{user.user.name}}'));</script></td>
+                        <td class="am-text-center am-text-middle"><img src = {{user.user.wxhead}} style = 'width:60px;height:60px'></img></td>
+                        <td class="am-text-center am-text-middle">
+                            <script type="text/javascript">
+                                if({{user.user.wxsex}}==1)
+                                    document.write('男');
+                                else
+                                    document.write('女');
+                            </script>
+                        </td>
+                        <td class="am-text-center am-text-middle">
+                            <script type="text/javascript">
+                                var unixTimestamp = new Date({{user.user.regTime}}*1000);
+                                document.write(unixTimestamp.toLocaleString());</script>
+                        </td>
+                        <td class="am-text-center am-text-middle">
+                            <script type="text/javascript">
+                                var unixTimestamp = new Date({{user.user.regTime}}*1000);
+                                Day = unixTimestamp.getDay()
+                                switch (Day) {
+                                    case 0:
+                                        document.write('星期日');
+                                        break;
+                                    case 1:
+                                        document.write('星期一');
+                                        break;
+                                    case 2:
+                                        document.write('星期二');
+                                        break;
+                                    case 3:
+                                        document.write('星期三');
+                                        break;
+                                    case 4:
+                                        document.write('星期四');
+                                        break;
+                                    case 5:
+                                        document.write('星期五');
+                                        break;
+                                    case 6:
+                                        document.write('星期六');
+                                        break;
+                                    default:
+                                        document.write('未知星期');
+                                }
+                            </script>
+                        </td>
+                        <td class="am-text-center am-text-middle">{{ user.user.regIp}}</td>
+                        <td class="am-text-center am-text-middle">{{ user.wins + user.losts}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <ul class="am-pagination am-fr">
+                总用户数：{{tol_user}}
+                <li><a href="{{url_for('userListByGamePage',page=1)}}">首页</a></li>
+                <li><a href="{{url_for('userListByGamePage',page=(1 if cur_page==1 else cur_page-1))}}">上一页</a></li>
+                <li><a href="{{url_for('userListByGamePage',page=(tol_page if cur_page==tol_page else cur_page+1))}}">下一页</a></li>
+                <li><a href="{{url_for('userListByGamePage',page=tol_page)}}">末页</a></li>
+                第<span>{{ cur_page }}</span>页/共<span>{{ tol_page }}</span>页
+            </ul>
+            <hr />
+        </form>
     </div>
 {% endblock %}

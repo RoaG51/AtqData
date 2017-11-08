@@ -1,50 +1,103 @@
 {% extends "base.html" %}
+{% block indexactive %}
+active
+{% endblock %}
 {% block son %}
-    <div class="admin-biaogelist">
-        <div class="listbiaoti am-cf">
-            <dl style="float: right;">
-                当前位置： <i class="am-icon-home">首页</i>
-            </dl>
+    <div class="tpl-content-wrapper">
+        <div class="tpl-content-page-title">
+            欢迎管理员
         </div>
-        <form class="am-form am-g">
-            <ul class="am-avg-sm-1 am-avg-md-4 am-margin am-padding am-text-center admin-content-list ">
-                <li><a href="#" class="am-text-success"><span class="am-icon-btn am-icon-users"></span><br/>总用户数<br/>{{ tol_user }}</a></li>
-                <li><a href="#" class="am-text-warning"><span class="am-icon-btn am-icon-weixin"></span><br/>微信用户<br/>{{ tol_wechat }}</a></li>
-                <li><a href="#" class="am-text-danger"><span class="am-icon-btn am-icon-user"></span><br/>游客<br/>{{ tol_guest }}</a></li>
-                <li><a href="#" class="am-text-secondary"><span class="am-icon-btn am-icon-paper-plane-o"></span><br/>总开局数<br/>{{ tol_game }}</a></li>
-            </ul>
-        </form>
+        <ol class="am-breadcrumb">
+            <li><a href="{{ url_for('show_index') }}" class="am-icon-home">首页</a></li>
+        </ol>
+        <div class="row">
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat blue">
+                    <div class="visual">
+                        <i class="am-icon-users"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> {{ tol_user }} </div>
+                        <div class="desc"> 总用户数 </div>
+                    </div>
+                    <a class="more" href="{{ url_for('userList') }}"> 查看更多
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat red">
+                    <div class="visual">
+                        <i class="am-icon-paper-plane-o"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> {{ tol_game }} </div>
+                        <div class="desc"> 总局数 </div>
+                    </div>
+                    <a class="more" href="{{ url_for('gameList') }}"> 查看更多
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat green">
+                    <div class="visual">
+                        <i class="am-icon-weixin"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> {{ tol_wechat }} </div>
+                        <div class="desc"> 微信用户 </div>
+                    </div>
+                    <a class="more" href=""> 查看更多
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="am-u-lg-3 am-u-md-6 am-u-sm-12">
+                <div class="dashboard-stat purple">
+                    <div class="visual">
+                        <i class="am-icon-user"></i>
+                    </div>
+                    <div class="details">
+                        <div class="number"> {{ tol_guest }} </div>
+                        <div class="desc"> 游客 </div>
+                    </div>
+                    <a class="more" href=""> 查看更多
+                        <i class="m-icon-swapright m-icon-white"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <form class="am-form am-g">
             <div class="am-u-md-6">
                 <div class="am-panel am-panel-default">
-                    <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-1'}">近日新增用户<span class="am-icon-chevron-down am-fr" ></span></div>
+                    <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-1'}">
+                        近日新增用户
+                        <span class="am-icon-chevron-down am-fr" ></span>
+                    </div>
                     <div id="collapse-panel-1" class="am-in">
                         <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
                             <tbody>
                             <tr>
                                 <th class="am-text-center">日期</th>
-                                <th>星期</th>
-                                <th>新增</th>
+                                <th class="am-text-center">星期</th>
+                                <th class="am-text-center">新增</th>
                             </tr>
                             <tr>
-                                <td class="am-text-center">1</td>
-                                <td>1</td>
-                                <td>1</td>
+                                <td class="am-text-center">昨天</td>
+                                <td class="am-text-center">星期一</td>
+                                <td class="am-text-center">999</td>
                             </tr>
                             <tr>
-                                <td class="am-text-center">2</td>
-                                <td>2</td>
-                                <td>2</td>
+                                <td class="am-text-center">今天</td>
+                                <td class="am-text-center">星期二</td>
+                                <td class="am-text-center">999</td>
                             </tr>
                             <tr>
-                                <td class="am-text-center">3</td>
-                                <td>3</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td class="am-text-center">4</td>
-                                <td>4</td>
-                                <td>4</td>
+                                <td class="am-text-center">明天</td>
+                                <td class="am-text-center">星期三</td>
+                                <td class="am-text-center">999</td>
                             </tr>
                             </tbody>
                         </table>
@@ -53,34 +106,31 @@
             </div>
             <div class="am-u-md-6">
                 <div class="am-panel am-panel-default">
-                    <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}">近日新开局数<span class="am-icon-chevron-down am-fr" ></span></div>
+                    <div class="am-panel-hd am-cf" data-am-collapse="{target: '#collapse-panel-2'}">
+                        近日新开局数<span class="am-icon-chevron-down am-fr" ></span>
+                    </div>
                     <div id="collapse-panel-2" class="am-in">
                         <table class="am-table am-table-bd am-table-bdrs am-table-striped am-table-hover">
                             <tbody>
                             <tr>
                                 <th class="am-text-center">日期</th>
-                                <th>星期</th>
-                                <th>新开</th>
+                                <th class="am-text-center">星期</th>
+                                <th class="am-text-center">新开</th>
                             </tr>
                             <tr>
-                                <td class="am-text-center">1</td>
-                                <td>1</td>
-                                <td>1</td>
+                                <td class="am-text-center">昨天</td>
+                                <td class="am-text-center">星期一</td>
+                                <td class="am-text-center">100</td>
                             </tr>
                             <tr>
-                                <td class="am-text-center">2</td>
-                                <td>2</td>
-                                <td>2</td>
+                                <td class="am-text-center">今天</td>
+                                <td class="am-text-center">星期二</td>
+                                <td class="am-text-center">100</td>
                             </tr>
                             <tr>
-                                <td class="am-text-center">3</td>
-                                <td>3</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td class="am-text-center">4</td>
-                                <td>4</td>
-                                <td>4</td>
+                                <td class="am-text-center">明天</td>
+                                <td class="am-text-center">星期三</td>
+                                <td class="am-text-center">100</td>
                             </tr>
                             </tbody>
                         </table>

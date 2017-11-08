@@ -1,122 +1,172 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html>
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- IE兼容 -->
-    <meta http-equiv="Cache-Control" content="no-siteapp" /> <!-- 百度转码 -->
-    <meta name="renderer" content="webkit"><!-- 极速模式 -->
-    <meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes">
-    <!-- 让网页的宽度自动适应手机屏幕的宽度。 其中： width=device-width ：表示宽度是设备屏幕的宽度 initial-scale=1.0：表示初始的缩放比例 minimum-scale=0.5：表示最小的缩放比例 maximum-scale=2.0：表示最大的缩放比例 user-scalable=yes：表示用户是否可以调整缩放比例 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=2.0,user-scalable=yes">
     <title>古董局中局后台管理系统</title>
-    <link rel="icon" type="image/png" href="../static/assets/i/favicon.png">
-    <!-- 网页名称旁的图标 -->
+    <link rel="icon" type="image/png" href="../static/assets/i/icon-tubiao.png">
     <link rel="apple-touch-icon-precomposed" href="../static/assets/i/app-icon72x72@2x.png">
-    <!-- Apple手机可以使用添加到主屏按钮将网站添加到主屏幕上。apple-touch-icon属性为“增加高光光亮的图标”；apple-touch-icon-precomposed属性为“设计原图图标” -->
     <link rel="stylesheet" href="../static/assets/css/amazeui.min.css"/>
     <link rel="stylesheet" href="../static/assets/css/admin.css">
-    <script src="../static/assets/js/jquery.min.js"></script>
-    <script src="../static/assets/js/app.js"></script>
+    <link rel="stylesheet" href="../static/assets/css/app.css">
+    <script src="../static/assets/js/echarts.min.js"></script>
 </head>
 
-<body>
-<!-- 导航栏 -->
-<header class="am-topbar admin-header" style="background:rgb(42,51,63);">
-    <div class="am-topbar-brand"><i class="am-icon-gear am-icon-spin"></i><a style="color:rgb(174,178,183);" href="{{ url_for('show_index') }}">古董局中局后台管理系统</a></div>
+<body data-type="index">
+<header class="am-topbar am-topbar-inverse admin-header">
+    <div class="am-topbar-brand">
+        <a href="{{ url_for('show_index') }}" class="tpl-logo">
+            <img src="../static/assets/img/gudong.png" alt="">
+        </a>
+    </div>
+    <div class="am-icon-list tpl-header-nav-hover-ico am-fl am-margin-right">
+    </div>
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only" data-am-collapse="{target:'#topbar-collapse'}">
+        <span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
     <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
-        <ul class="am-nav am-nav-pills am-topbar-nav admin-header-list">
-{#            <li class="kuanjie">#}
-{#                <a class="am-icon-user-plus" style="color:rgb(174,178,183);" href="{{ url_for('dayUpUserList') }}">日增用户</a>#}
-{#                <a class="am-icon-user-plus" style="color:rgb(174,178,183);" href="{{ url_for('dayUpGameList') }}">日增开局</a>#}
-{#                <a class="am-icon-list" style="color:rgb(174,178,183);" href="{{ url_for('userList') }}">用户列表</a>#}
-{#                <a class="am-icon-list" style="color:rgb(174,178,183);" href="{{ url_for('gameList') }}">开局列表</a>#}
-{#                <a class="am-icon-line-chart"style="color:rgb(174,178,183);" href="{{ url_for('userDiagram') }}">用户图列</a>#}
-{#                <a class="am-icon-line-chart" style="color:rgb(174,178,183);" href="{{ url_for('gameDiagram') }}">开局图列</a>#}
+        <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
+            <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link">
+                <span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+{#            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>#}
+{#                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">#}
+{#                    <span class="tpl-header-list-user-nick">盒中闪电</span><span class="tpl-header-list-user-ico">#}
+{#                    <img src="../static/assets/img/user04.png"></span>#}
+{#                </a>#}
+{#                <ul class="am-dropdown-content">#}
+{#                    <li><a href="{{ url_for('login') }}"><span class="am-icon-key"></span> 登陆</a></li>#}
+{#                    <li><a href="{{ url_for('signUp') }}"><span class="am-icon-plus"></span> 注册</a></li>#}
+{#                    <li><a href="{{ url_for('login') }}"><span class="am-icon-power-off"></span> 退出</a></li>#}
+{#                </ul>#}
 {#            </li>#}
-            <li class="soso">
-                <p>
-                    <select data-am-selected="{btnWidth: 70, btnSize: 'sm', btnStyle: 'default'}">
-                        <option value="b">全部</option>
-                        <option value="o">用户</option>
-                        <option value="o">开局</option>
-                    </select>
-                </p>
-                <p class="ycfg">
-                    <input type="text" class="am-form-field am-input-sm" placeholder="用户ID" />
-                </p>
-                <p>
-                    <button class="am-btn am-btn-xs am-btn-default am-xiao"><i class="am-icon-search"></i></button>
-                </p>
-            </li>
-            <li class="am-hide-sm-only" style="float: right;">
-                <a style="color:rgb(174,178,183);" href="javascript:;" id="admin-fullscreen"><span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a>
-            </li>
+{#            <li><a href="{{ url_for('login') }}" class="tpl-header-list-link"><span class="am-icon-sign-out tpl-header-list-ico-out-size"></span></a></li>#}
         </ul>
     </div>
 </header>
-<div class="am-cf admin-main">
-    <!-- 菜单栏 -->
-    <div class="nav-navicon admin-main admin-sidebar">
-        <p class="am-text-center" style="color:rgb(174,178,183);">欢迎系统管理员<i class="am-icon-child"></i> </p>
-        <div class="sideMenu">
-            <h3 class="am-icon-users"><em></em> <a href="#">用户管理</a></h3>
-            <ul>
-                <li class="am-icon-list"><a href="{{ url_for('userList') }}">用户详情列表</a></li>
-                <li class="am-icon-user-plus"><a href="{{ url_for('dayUpUserList') }}">日增用户列表</a> </li>
-                <li class="am-icon-line-chart"><a href="{{ url_for('userDiagram') }}">日增用户视图</a> </li>
-                <li class="am-icon-tasks"><a href="{{ url_for('userDataByGame') }}">用户局数列表</a> </li>
-                <li class="am-icon-pie-chart"><a href="{{ url_for('userDiagramByGame') }}">用户局数饼图</a> </li>
-                <li class="am-icon-pie-chart"><a href="{{ url_for('userDiagramBySex') }}">用户性别饼图</a> </li>
-            </ul>
-            <h3 class="am-icon-paper-plane-o"><em></em> <a href=""> 开局管理</a></h3>
-            <ul>
-                <li class="am-icon-list"><a href="{{ url_for('gameList') }}">开局详情列表</a></li>
-                <li class="am-icon-user-plus"><a href="{{ url_for('dayUpGameList') }}">日增开局列表</a> </li>
-                <li class="am-icon-line-chart"><a href="{{ url_for('gameDiagram') }}">日增开局视图</a> </li>
-                <li class="am-icon-pie-chart"><a href="{{ url_for('gameDiagramByNum') }}">开局人数饼图</a> </li>
-                <li class="am-icon-pie-chart"><a href="{{ url_for('winrateDiagramByNum') }}">胜率人数饼图</a> </li>
-            </ul>
-            <h3 class="am-icon-paper-plane-o"><em></em> <a href=""> 周期统计</a></h3>
-            <ul>
-                <li class="am-icon-line-chart"><a href="{{ url_for('periodAnalyseByDay') }}">单日同比数据</a></li>
-                <li class="am-icon-line-chart"><a href="{{ url_for('periodAnalyseByDayTotal') }}">单日叠加数据</a></li>
-                <li class="am-icon-line-chart"><a href="{{ url_for('periodAnalyseByWeek') }}">单周同比数据</a></li>
-                <li class="am-icon-line-chart"><a href="{{ url_for('periodAnalyseByWeekTotal') }}">单周叠加数据</a></li>
-            </ul>
+
+<div class="tpl-page-container tpl-page-header-fixed">
+    <div class="tpl-left-nav tpl-left-nav-hover">
+        <div class="tpl-left-nav-title">
+            古董局中局后台管理系统
         </div>
-        <script type="text/javascript">
-            jQuery(".sideMenu").slide({
-                titCell:"h3", //鼠标触发对象
-                targetCell:"ul", //与titCell一一对应，第n个titCell控制第n个targetCell的显示隐藏
-                effect:"slideDown", //targetCell下拉效果
-                delayTime:300 , //效果时间
-                triggerTime:150, //鼠标延迟触发时间（默认150）
-                defaultPlay:true,//默认是否执行效果（默认true）
-                returnDefault:true //鼠标从.sideMen移走后返回默认状态（默认false）
-            });
-        </script>
-        <div style="background:rgb(42,53,66);">
-            <div class="am-panel-bd" style="color:rgb(174,178,183);">
-                <p><span class="am-icon-bookmark"></span> 公告</p>
-                <br />
-                <p class="am-text-center"> 鉴宝易，鉴人难。</p>
-                <br />
-                <p style="float: right">— — 古董局中局</p>
-            </div>
-        </div>
-    </div>
-    <!-- 快捷栏 -->
-    <div class=" admin-content">
-        <div class="daohang">
-            <ul>
-                <li><a href="{{ url_for('show_index') }}">
-                    <button type="button" class="am-btn am-btn-default am-radius am-btn-xs am-icon-home">首页</button></a>
+        <div class="tpl-left-nav-list">
+            <ul class="tpl-left-nav-menu">
+                <li class="tpl-left-nav-item">
+                    <a href="{{ url_for('show_index') }}" class="nav-link tpl-left-nav-link-list {% block indexactive %}{% endblock %}">
+                        <i class="am-icon-home"></i>
+                        <span>首页</span>
+                    </a>
                 </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list {% block useractive %}{% endblock %}">
+                        <i class="am-icon-users"></i>
+                        <span>用户管理</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" {% block userstyle %}{% endblock %}>
+                        <li>
+                            <a href="{{ url_for('userList') }}" {% block userListactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>用户详细列表</span>
+                            </a>
+                            <a href="{{ url_for('dayUpUserList') }}" {% block dayUpUserListactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>日增用户列表</span>
+                            </a>
+                            <a href="{{ url_for('userDiagram') }}" {% block userDiagramactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>日增用户视图</span>
+                            </a>
+                            <a href="{{ url_for('userDataByGame') }}" {% block userDataByGameactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>用户局数列表</span>
+                            </a>
+                            <a href="{{ url_for('userDiagramByGame') }}" {% block userDiagramByGameactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>用户局数饼图</span>
+                            </a>
+                            <a href="{{ url_for('userDiagramBySex') }}" {% block userDiagramBySexactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>用户性别饼图</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list" {% block gameactive %}{% endblock %}>
+                        <i class="am-icon-paper-plane-o"></i>
+                        <span>开局管理</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" {% block gamestyle %}{% endblock %}>
+                        <li>
+                            <a href="{{ url_for('gameList') }}" {% block gameListactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>开局详细列表</span>
+                            </a>
+                            <a href="{{ url_for('dayUpGameList') }}" {% block dayUpGameListactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>日增开局列表</span>
+                            </a>
+                            <a href="{{ url_for('gameDiagram') }}" {% block gameDiagramactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>日增开局视图</span>
+                            </a>
+                            <a href="{{ url_for('gameDiagramByNum') }}" {% block gameDiagramByNumactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>开局人数饼图</span>
+                            </a>
+                            <a href="{{ url_for('winrateDiagramByNum') }}" {% block winrateDiagramByNumactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>胜率人数饼图</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="tpl-left-nav-item">
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list {% block dataactive %}{% endblock %}">
+                        <i class="am-icon-line-chart"></i>
+                        <span>周期统计</span>
+                        <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
+                    </a>
+                    <ul class="tpl-left-nav-sub-menu" {% block datastyle %}{% endblock %}>
+                        <li>
+                            <a href="{{ url_for('periodAnalyseByDay') }}" {% block periodAnalyseByDayactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>单日同比数据</span>
+                            </a>
+                            <a href="{{ url_for('periodAnalyseByDayTotal') }}" {% block periodAnalyseByDayTotalactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>单日叠加数据</span>
+                            </a>
+                            <a href="{{ url_for('periodAnalyseByWeek') }}" {% block periodAnalyseByWeekactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>单周同比数据</span>
+                            </a>
+                            <a href="{{ url_for('periodAnalyseByWeekTotal') }}" {% block periodAnalyseByWeekTotalactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>单周叠加数据</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+{#                <li class="tpl-left-nav-item">#}
+{#                    <a href="{{ url_for('login') }}" class="nav-link tpl-left-nav-link-list">#}
+{#                        <i class="am-icon-key"></i>#}
+{#                        <span>登录</span>#}
+{#                    </a>#}
+{#                </li>#}
             </ul>
         </div>
-        {% block son %}
-        {% endblock %}
     </div>
+    {% block son %}
+    {% endblock %}
 </div>
-<script src="../static/assets/js/amazeui.min.js"></script> <!-- 必须放后面 -->
+<script src="../static/assets/js/jquery.min.js"></script>
+<script src="../static/assets/js/amazeui.min.js"></script>
+<script src="../static/assets/js/iscroll.js"></script>
+<script src="../static/assets/js/app.js"></script>
 </body>
 </html>

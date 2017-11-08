@@ -1,36 +1,41 @@
 {% extends "base.html" %}
+{% block gameactive %}
+active
+{% endblock %}
+{% block gamestyle %}
+style="display:block"
+{% endblock %}
+{% block gameDiagramByNumactive %}
+class="active"
+{% endblock %}
 {% block son %}
-    <div class="admin-biaogelist" >
-        <div class="listbiaoti am-cf">
-            <ul class="am-icon-flag on">
-                不同人数开局数量统计
-            </ul>
-            <dl style="float: right;">
-                当前位置： <a class="am-icon-home" href="{{ url_for('show_index') }}">首页</a> > 不同人数开局数量统计
-            </dl>
-        </div>
-        <div id="main" style="height:70%;width: 70%"></div>
-        <script src="../static/assets/js/echarts.js"></script>
-        <script type="text/javascript">
-            var myChart = echarts.init(document.getElementById('main'));
-            option = {
-                title: {
-                    text: '不同人数开局数量统计',
-                    left: 'center'
-                },
-                tooltip : {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    // orient: 'vertical',
-                    // top: 'middle',
-                    bottom: 10,
-                    left: 'center',
-                    data: ['{{datas[0][0]}}', '{{datas[1][0]}}','{{datas[2][0]}}']
-                },
-                series : [
-                    {
+    <div class="tpl-content-wrapper">
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    开局人数饼图
+                </div>
+            </div>
+            <div class="tpl-echarts tpl-chart-mb" id="main">
+                <script src="../static/assets/js/echarts.js"></script>
+                <script type="text/javascript">
+                    var myChart = echarts.init(document.getElementById('main'));
+                    option = {
+                        title: {
+                            text: '不同人数开局数量统计',
+                            left: 'center'
+                        },
+                        tooltip : {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        legend: {
+                            bottom: 10,
+                            left: 'center',
+                            data: ['{{datas[0][0]}}', '{{datas[1][0]}}','{{datas[2][0]}}']
+                        },
+                        series : [
+                            {
                         type: 'pie',
                         radius : '65%',
                         center: ['50%', '50%'],
@@ -51,7 +56,9 @@
                     }
                 ]
             };
-            myChart.setOption(option);
-        </script>
+                    myChart.setOption(option);
+                </script>
+            </div>
+        </div>
     </div>
 {% endblock %}
