@@ -199,14 +199,15 @@ def periodAnalyseByWeekOrder(order):
 
 @app.route('/periodAnalyseByWeekTotal')
 def periodAnalyseByWeekTotal():
-    secDay = 24 * 3600
-    firstDay = datetime(2017, 9, 9, 0, 0, 0)
-    firstDay = time.mktime(firstDay.timetuple())
-    toDay = time.time()
+    firstDay = time.mktime(datetime(2017, 9, 9, 0, 0, 0).timetuple())
     myData = []
-    for i in range(7):
-        myData.append(periodAnalyse(start=firstDay, step=secDay, end=toDay, unit=7, order=i+1,type=2))
-    return render_template('periodAnalyseByWeekTotal.html', datas=myData)
+    for order in range(7):
+        users = s_plat_user.query.filter(((s_plat_user.regTime - firstDay) / (24*3600.0)) % 7 > order).filter(
+            ((s_plat_user.regTime - firstDay) / (24*3600.0)) % 7 < order+1).all()
+        games = s_plat_fightlog.query.filter(((s_plat_fightlog.logTime - firstDay) / (24*3600.0)) % 7 > order).filter(
+            ((s_plat_fightlog.logTime - firstDay) / (24*3600.0)) % 7 < order+1).all()
+        myData.append([order,len(users),len(games)])
+    return render_template('periodAnalyseByWeekTotal.html',datas=myData)
 
 @app.route('/userDiagramBySex')
 def userDiagramBySex():

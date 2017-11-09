@@ -48,10 +48,9 @@ def refreshLocalDbDay():
 
     toDay = time.time()
     secDay = 24 * 3600
-    myData = []
     i = 0
     while updateTime + secDay * (i+1) < toDay:
-        searchItem = s_data_numbyday.query.filter(s_data_numbyday.time == updateTime + secDay * i).first()
+        searchItem = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).filter(s_data_numbyday.time == updateTime + secDay * i).first()
         if searchItem == None:
             usernum = len(s_plat_user.query.filter(s_plat_user.regTime < updateTime + secDay * (i+1)).filter(
                 s_plat_user.regTime > updateTime + secDay * i).all())
@@ -85,10 +84,9 @@ def refreshLocalDbWeek():
         updateTime = updateItem.time
     toDay = time.time()
     secWeek = 24 * 3600 * 7
-    myData = []
     i = 0
     while updateTime + secWeek * (i + 1) < toDay:
-        searchItem = s_data_numbyweek.query.filter(s_data_numbyweek.time == updateTime + secWeek * i).first()
+        searchItem = s_data_numbyweek.query.filter(s_data_numbyweek.time == updateTime + secWeek * i).filter(s_data_numbyweek.usertolnum > 0).first()
         if searchItem == None:
             usernum = len(s_plat_user.query.filter(s_plat_user.regTime < updateTime + secWeek * (i + 1)).filter(
                 s_plat_user.regTime > updateTime + secWeek * i).all())
@@ -123,10 +121,10 @@ def refreshLocalDbHour():
         updateTime = updateItem.time
     toDay = time.time()
     secHour =  3600
-    myData = []
-    i = (updateItem.hour) % 24-1
+    hourcounter= updateItem.hour
+    i = 0
     while updateTime + secHour * (i + 1) < toDay:
-        searchItem = s_data_numbyhour.query.filter(s_data_numbyhour.time == updateTime + secHour * i).first()
+        searchItem = s_data_numbyhour.query.filter(s_data_numbyhour.time == updateTime + secHour * i).filter(s_data_numbyhour.hour < 25).first()
         if searchItem == None:
             usernum = len(s_plat_user.query.filter(s_plat_user.regTime < updateTime + secHour * (i + 1)).filter(
                 s_plat_user.regTime > updateTime + secHour * i).all())
@@ -136,14 +134,14 @@ def refreshLocalDbHour():
                     s_plat_fightlog.logTime > updateTime + secHour * i).all())
             gametolnum = len(
                 s_plat_fightlog.query.filter(s_plat_fightlog.logTime < updateTime + secHour * (i + 1)).all())
-            newItem = s_data_numbyhour(time=updateTime + secHour * i, hour= i % 24 + 1 ,usernum=usernum, usertolnum=usertolnum,
+            newItem = s_data_numbyhour(time=updateTime + secHour * i, hour= (hourcounter +i-1) % 24 + 1 ,usernum=usernum, usertolnum=usertolnum,
                                        gamenum=gamenum,
                                        gametolnum=gametolnum)
             db.session.add(newItem)
             db.session.commit()
         i += 1
     delete = s_data_numbyhour.query.filter(s_data_numbyhour.hour > 24).first()
-    update = s_data_numbyhour(time=updateTime + secHour * (i - 1),hour = i % 24 + 24, usernum=0, usertolnum=0, gamenum=0, gametolnum=0)
+    update = s_data_numbyhour(time=updateTime + secHour * (i - 1),hour = (hourcounter +i-2) % 24 + 25, usernum=0, usertolnum=0, gamenum=0, gametolnum=0)
     db.session.delete(delete)
     db.session.add(update)
     db.session.commit()
