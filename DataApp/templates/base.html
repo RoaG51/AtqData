@@ -79,6 +79,10 @@
                                 <i class="am-icon-angle-right"></i>
                                 <span>日增用户视图</span>
                             </a>
+                            <a href="{{ url_for('userDiagramByWeek') }}" {% block userDiagramByWeekactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>周增用户视图</span>
+                            </a>
                             <a href="{{ url_for('userDataByGame') }}" {% block userDataByGameactive %}{% endblock %}>
                                 <i class="am-icon-angle-right"></i>
                                 <span>用户局数列表</span>
@@ -95,7 +99,7 @@
                     </ul>
                 </li>
                 <li class="tpl-left-nav-item">
-                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list" {% block gameactive %}{% endblock %}>
+                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list {% block gameactive %}{% endblock %}">
                         <i class="am-icon-paper-plane-o"></i>
                         <span>开局管理</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
@@ -113,6 +117,10 @@
                             <a href="{{ url_for('gameDiagram') }}" {% block gameDiagramactive %}{% endblock %}>
                                 <i class="am-icon-angle-right"></i>
                                 <span>日增开局视图</span>
+                            </a>
+                            <a href="{{ url_for('gameDiagramByWeek') }}" {% block gameDiagramByWeekactive %}{% endblock %}>
+                                <i class="am-icon-angle-right"></i>
+                                <span>周增开局视图</span>
                             </a>
                             <a href="{{ url_for('gameDiagramByNum') }}" {% block gameDiagramByNumactive %}{% endblock %}>
                                 <i class="am-icon-angle-right"></i>

@@ -3,10 +3,12 @@ from DataApp.model.s_plat_user import s_plat_user
 from DataApp.model.s_plat_fightbfs import s_plat_fightbfs
 from DataApp.model.s_plat_fightlog import s_plat_fightlog
 from DataApp.model.s_data_numbyday import s_data_numbyday
+from DataApp.model.s_data_numbyweek import s_data_numbyweek
+from DataApp.model.s_data_numbyhour import s_data_numbyhour
 from DataApp import app,db
 from flask import render_template,redirect,url_for
 from datetime import datetime
-from innerFunctions import periodAnalyse,refreshLocalDb
+from innerFunctions import periodAnalyse,refreshLocalDbDay,refreshLocalDbWeek,refreshLocalDbHour
 import time,math
 
 
@@ -14,7 +16,7 @@ import time,math
 
 @app.route('/')
 def show_index():
-    refreshLocalDb()
+    refreshLocalDbDay()
     myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     myData.reverse()
 
@@ -67,7 +69,7 @@ def dayUpGameList():
     return redirect(url_for('dayUpGameListPage',page=1))
 @app.route('/dayUpGameList/<int:page>')
 def dayUpGameListPage(page):
-    refreshLocalDb()
+    refreshLocalDbDay()
     myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     myData.reverse()
     tol_item = len(myData)
@@ -80,7 +82,7 @@ def dayUpUserList():
     return redirect(url_for('dayUpUserListPage',page=1))
 @app.route('/dayUpUserList/<int:page>')
 def dayUpUserListPage(page):
-    refreshLocalDb()
+    refreshLocalDbDay()
     myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     myData.reverse()
     tol_item = len(myData)
@@ -103,15 +105,29 @@ def userListByGamePage(page):
 
 @app.route('/userDiagram')
 def userDiagram():
-    refreshLocalDb()
+    refreshLocalDbDay()
     myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     return render_template('userDiagram.html', datas=myData)
 
+
 @app.route('/gameDiagram')
 def gameDiagram():
-    refreshLocalDb()
+    refreshLocalDbDay()
     myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
     return render_template('gameDiagram.html',datas = myData)
+
+
+@app.route('/userDiagramByWeek')
+def userDiagramByWeek():
+    refreshLocalDbWeek()
+    myData = s_data_numbyweek.query.filter(s_data_numbyweek.usertolnum > 0).all()
+    return render_template('userDiagramByWeek.html', datas=myData)
+
+@app.route('/gameDiagramByWeek')
+def gameDiagramByWeek():
+    refreshLocalDbWeek()
+    myData = s_data_numbyweek.query.filter(s_data_numbyweek.usertolnum > 0).all()
+    return render_template('gameDiagramByWeek.html',datas = myData)
 
 @app.route('/userDataByGame')
 def userDataByGame():
@@ -153,12 +169,9 @@ def periodAnalyseByDay():
     return redirect(url_for('periodAnalyseByDayOrder', order=1))
 @app.route('/periodAnalyseByDay/<int:order>')
 def periodAnalyseByDayOrder(order):
-    secHour = 3600
-    firstDay = datetime(2017, 9, 9, 0, 0, 0)
-    firstDay = time.mktime(firstDay.timetuple())
-    toDay = time.time()
-    myData = periodAnalyse(start=firstDay, step=secHour, end=toDay, unit=24, order=order)
-    return render_template('testList.html', datas=myData)
+    refreshLocalDbHour()
+    myData = s_data_numbyhour.query.filter(s_data_numbyhour.hour < 25).filter(s_data_numbyhour.hour == order).all()
+    return render_template('periodAnalyseByDay.html', datas=myData,order = order)
 
 @app.route('/periodAnalyseByDayTotal')
 def periodAnalyseByDayTotal():

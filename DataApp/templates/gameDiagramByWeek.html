@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block gameactive %}
+active
+{% endblock %}
+{% block gamestyle %}
+style="display:block"
+{% endblock %}
+{% block gameDiagramByWeekactive %}
+class="active"
+{% endblock %}
+{% block son %}
+    <div class="tpl-content-wrapper">
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    周增开局视图
+                </div>
+            </div>
+            <div class="tpl-echarts tpl-chart-mb" id="main">
+                <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+                <script type="text/javascript">
+                    var myChart = echarts.init(document.getElementById("main"));
+                    var option = {
+                        tooltip : {
+                            trigger: 'axis',
+                            formatter : function (params) {
+                                var date = new Date(params.value[0]);
+                                data = date.getFullYear() + '-'
+                                    + (date.getMonth() + 1) + '-'
+                                    + date.getDate() + ' ';
+
+                                return data + '<br/>'
+                                    + params.value[1]
+                            }
+                        },
+                        toolbox: {
+                            show : true,
+                            feature : {
+                                mark : {show: false},
+                                dataView : {show: false, readOnly: false},
+                                magicType : {show: true, type: ['line', 'bar']},
+                                restore : {show: true},
+                                saveAsImage : {show: false}
+                            }
+                        },
+                        calculable : true,
+                        dataZoom: {
+                            show: true,
+                            start : 70
+                        },
+                        legend : {
+                            data : ['新增开局','总开局数']
+                        },
+                        grid: {
+                            y2: 80
+                        },
+                        xAxis : [
+                            {
+                                type : 'time',
+                                splitNumber:10
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value'
+                            }
+                        ],
+                        series : [
+                            {
+                                name: '新增开局',
+                                type: 'line',
+                                showAllSymbol: true,
+                                data: function () {
+                                    var d = [];
+                                    {% for data in datas %}
+                                        d.push([
+                                            new Date({{data.time*1000}}),
+                                            {{ data.gamenum}}
+                                        ]);
+                                    {% endfor %}
+                                    return d;
+                                }()
+                            },
+                            {
+                                name: '总开局数',
+                                type: 'line',
+                                showAllSymbol: true,
+                                data: function () {
+                                    var d = [];
+                                    {% for data in datas %}
+                                        d.push([
+                                            new Date({{data.time*1000}}),
+                                            {{ data.gametolnum}}
+                                        ]);
+                                    {% endfor %}
+                                    return d;
+                                }()
+                            }
+                        ]
+                    };
+                    myChart.setOption(option);
+                </script>
+            </div>
+        </div>
+    </div>
+{% endblock %}

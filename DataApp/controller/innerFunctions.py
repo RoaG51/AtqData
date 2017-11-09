@@ -4,6 +4,8 @@ from DataApp.model.s_plat_user import s_plat_user
 from DataApp.model.s_plat_fightbfs import s_plat_fightbfs
 from DataApp.model.s_plat_fightlog import s_plat_fightlog
 from DataApp.model.s_data_numbyday import s_data_numbyday
+from DataApp.model.s_data_numbyweek import s_data_numbyweek
+from DataApp.model.s_data_numbyhour import s_data_numbyhour
 from datetime import datetime
 from DataApp import db
 import time
@@ -33,7 +35,7 @@ def periodAnalyse(start,step,end,unit=0,order=1,type=1,reverse= False):
         myData = [order,tol_user_num,tol_game_num]
     return myData
 
-def refreshLocalDb():
+def refreshLocalDbDay():
     #更新日期为当日开始0点
     updateItem = s_data_numbyday.query.filter(s_data_numbyday.usertolnum == 0).first()
     if updateItem == None:
@@ -71,11 +73,85 @@ def refreshLocalDb():
 
     return updateTime
 
+def refreshLocalDbWeek():
+    # 更新日期为当日开始0点
+    updateItem = s_data_numbyweek.query.filter(s_data_numbyweek.usertolnum == 0).first()
+    if updateItem == None:
+        updateTime = time.mktime(datetime(2017, 9, 9, 0, 0, 0).timetuple())
+        newUpdateItem = s_data_numbyweek(time=updateTime, usernum=0, usertolnum=0, gamenum=0, gametolnum=0)
+        db.session.add(newUpdateItem)
+        db.session.commit()
+    else:
+        updateTime = updateItem.time
+    toDay = time.time()
+    secWeek = 24 * 3600 * 7
+    myData = []
+    i = 0
+    while updateTime + secWeek * (i + 1) < toDay:
+        searchItem = s_data_numbyweek.query.filter(s_data_numbyweek.time == updateTime + secWeek * i).first()
+        if searchItem == None:
+            usernum = len(s_plat_user.query.filter(s_plat_user.regTime < updateTime + secWeek * (i + 1)).filter(
+                s_plat_user.regTime > updateTime + secWeek * i).all())
+            usertolnum = len(s_plat_user.query.filter(s_plat_user.regTime < updateTime + secWeek * (i + 1)).all())
+            gamenum = len(
+                s_plat_fightlog.query.filter(s_plat_fightlog.logTime < updateTime + secWeek * (i + 1)).filter(
+                    s_plat_fightlog.logTime > updateTime + secWeek * i).all())
+            gametolnum = len(
+                s_plat_fightlog.query.filter(s_plat_fightlog.logTime < updateTime + secWeek * (i + 1)).all())
+            newItem = s_data_numbyweek(time=updateTime + secWeek * i, usernum=usernum, usertolnum=usertolnum,
+                                       gamenum=gamenum,
+                                       gametolnum=gametolnum)
+            db.session.add(newItem)
+            db.session.commit()
+        i += 1
+    delete = s_data_numbyweek.query.filter(s_data_numbyweek.usertolnum == 0).first()
+    update = s_data_numbyweek(time=updateTime + secWeek * (i - 1), usernum=0, usertolnum=0, gamenum=0, gametolnum=0)
+    db.session.delete(delete)
+    db.session.add(update)
+    db.session.commit()
+    return updateTime
 
+def refreshLocalDbHour():
+    # 更新日期为当日开始0点
+    updateItem = s_data_numbyhour.query.filter(s_data_numbyhour.hour > 24).first()
+    if updateItem == None:
+        updateTime = time.mktime(datetime(2017, 9, 9, 0, 0, 0).timetuple())
+        newUpdateItem = s_data_numbyhour(time=updateTime,hour=25, usernum=0, usertolnum=0, gamenum=0, gametolnum=0)
+        db.session.add(newUpdateItem)
+        db.session.commit()
+    else:
+        updateTime = updateItem.time
+    toDay = time.time()
+    secHour =  3600
+    myData = []
+    i = (updateItem.hour) % 24-1
+    while updateTime + secHour * (i + 1) < toDay:
+        searchItem = s_data_numbyhour.query.filter(s_data_numbyhour.time == updateTime + secHour * i).first()
+        if searchItem == None:
+            usernum = len(s_plat_user.query.filter(s_plat_user.regTime < updateTime + secHour * (i + 1)).filter(
+                s_plat_user.regTime > updateTime + secHour * i).all())
+            usertolnum = len(s_plat_user.query.filter(s_plat_user.regTime < updateTime + secHour * (i + 1)).all())
+            gamenum = len(
+                s_plat_fightlog.query.filter(s_plat_fightlog.logTime < updateTime + secHour * (i + 1)).filter(
+                    s_plat_fightlog.logTime > updateTime + secHour * i).all())
+            gametolnum = len(
+                s_plat_fightlog.query.filter(s_plat_fightlog.logTime < updateTime + secHour * (i + 1)).all())
+            newItem = s_data_numbyhour(time=updateTime + secHour * i, hour= i % 24 + 1 ,usernum=usernum, usertolnum=usertolnum,
+                                       gamenum=gamenum,
+                                       gametolnum=gametolnum)
+            db.session.add(newItem)
+            db.session.commit()
+        i += 1
+    delete = s_data_numbyhour.query.filter(s_data_numbyhour.hour > 24).first()
+    update = s_data_numbyhour(time=updateTime + secHour * (i - 1),hour = i % 24 + 24, usernum=0, usertolnum=0, gamenum=0, gametolnum=0)
+    db.session.delete(delete)
+    db.session.add(update)
+    db.session.commit()
+    return updateTime
 
-# def ipToGeo(users):
-#     for user in users[0:3]:
-#         myurl="http://ip.taobao.com/service/getIpInfo.php?ip=39.108.126.132"
-#         r = requests.get(myurl)
-#         user.regIp = r.content
-#     return users
+    # def ipToGeo(users):
+    #     for user in users[0:3]:
+    #         myurl="http://ip.taobao.com/service/getIpInfo.php?ip=39.108.126.132"
+    #         r = requests.get(myurl)
+    #         user.regIp = r.content
+    #     return users
