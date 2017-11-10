@@ -3,9 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Cache-Control" content="no-siteapp" />
     <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.5, maximum-scale=2.0,user-scalable=yes">
+    {% block viewport %}{% endblock %}
     <title>古董局中局后台管理系统</title>
     <link rel="icon" type="image/png" href="../static/assets/i/icon-tubiao.png">
     <link rel="apple-touch-icon-precomposed" href="../static/assets/i/app-icon72x72@2x.png">
@@ -28,8 +27,8 @@
         <span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
     <div class="am-collapse am-topbar-collapse" id="topbar-collapse">
         <ul class="am-nav am-nav-pills am-topbar-nav am-topbar-right admin-header-list tpl-header-list">
-            <li class="am-hide-sm-only"><a href="javascript:;" id="admin-fullscreen" class="tpl-header-list-link">
-                <span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>
+{#            <li class="am-hide-sm-only"><a href="javascript:" id="admin-fullscreen" class="tpl-header-list-link">#}
+{#                <span class="am-icon-arrows-alt"></span> <span class="admin-fullText">开启全屏</span></a></li>#}
 {#            <li class="am-dropdown" data-am-dropdown data-am-dropdown-toggle>#}
 {#                <a class="am-dropdown-toggle tpl-header-list-link" href="javascript:;">#}
 {#                    <span class="tpl-header-list-user-nick">盒中闪电</span><span class="tpl-header-list-user-ico">#}
@@ -60,7 +59,7 @@
                     </a>
                 </li>
                 <li class="tpl-left-nav-item">
-                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list {% block useractive %}{% endblock %}">
+                    <a href="javascript:" class="nav-link tpl-left-nav-link-list {% block useractive %}{% endblock %}">
                         <i class="am-icon-users"></i>
                         <span>用户管理</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
@@ -99,7 +98,7 @@
                     </ul>
                 </li>
                 <li class="tpl-left-nav-item">
-                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list {% block gameactive %}{% endblock %}">
+                    <a href="javascript:" class="nav-link tpl-left-nav-link-list {% block gameactive %}{% endblock %}">
                         <i class="am-icon-paper-plane-o"></i>
                         <span>开局管理</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
@@ -134,7 +133,7 @@
                     </ul>
                 </li>
                 <li class="tpl-left-nav-item">
-                    <a href="javascript:;" class="nav-link tpl-left-nav-link-list {% block dataactive %}{% endblock %}">
+                    <a href="javascript:" class="nav-link tpl-left-nav-link-list {% block dataactive %}{% endblock %}">
                         <i class="am-icon-line-chart"></i>
                         <span>周期统计</span>
                         <i class="am-icon-angle-right tpl-left-nav-more-ico am-fr am-margin-right"></i>
@@ -147,7 +146,7 @@
                             </a>
                             <a href="{{ url_for('periodAnalyseByDayTotal') }}" {% block periodAnalyseByDayTotalactive %}{% endblock %}>
                                 <i class="am-icon-angle-right"></i>
-                                <span>单日叠加数据</span>
+                                <span>时间叠加数据</span>
                             </a>
                             <a href="{{ url_for('periodAnalyseByWeek') }}" {% block periodAnalyseByWeekactive %}{% endblock %}>
                                 <i class="am-icon-angle-right"></i>

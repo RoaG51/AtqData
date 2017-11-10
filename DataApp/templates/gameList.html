@@ -1,13 +1,21 @@
 {% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
 {% block gameactive %}
-active
+    active
 {% endblock %}
+
 {% block gamestyle %}
-style="display:block"
+    style="display:block"
 {% endblock %}
+
 {% block gameListactive %}
-class="active"
+    class="active"
 {% endblock %}
+
 {% block son %}
     <div class="tpl-content-wrapper">
         <div class="tpl-content-page-title">

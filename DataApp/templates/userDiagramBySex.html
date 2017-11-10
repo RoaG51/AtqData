@@ -1,13 +1,21 @@
 {% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
 {% block useractive %}
-active
+    active
 {% endblock %}
+
 {% block userstyle %}
-style="display:block"
+    style="display:block"
 {% endblock %}
+
 {% block userDiagramBySexactive %}
-class="active"
+    class="active"
 {% endblock %}
+
 {% block son %}
     <div class="tpl-content-wrapper">
         <div class="tpl-portlet-components">
@@ -30,8 +38,6 @@ class="active"
                     formatter: "{a} <br/>{b} : {c} ({d}%)"
                 },
                 legend: {
-                    // orient: 'vertical',
-                    // top: 'middle',
                     bottom: 10,
                     left: 'center',
                     data: ['{{datas[0][0]}}', '{{datas[1][0]}}','{{datas[2][0]}}']

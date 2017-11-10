@@ -1,13 +1,21 @@
 {% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
 {% block dataactive %}
-active
+    active
 {% endblock %}
+
 {% block datastyle %}
-style="display:block"
+    style="display:block"
 {% endblock %}
+
 {% block periodAnalyseByWeekTotalactive %}
-class="active"
+    class="active"
 {% endblock %}
+
 {% block son %}
     <div class="tpl-content-wrapper">
         <div class="tpl-portlet-components">
@@ -25,64 +33,64 @@ class="active"
                             trigger: 'axis'
                         },
                         toolbox: {
-                show : true,
-                feature : {
-                    mark : {show: false},
-                    dataView : {show: false, readOnly: false},
-                    magicType : {show: true, type: ['line', 'bar']},
-                    restore : {show: true},
-                    saveAsImage : {show: false}
-                }
-            },
-            calculable : true,
-            legend : {
-                data : ['新增用户','新增开局']
-            },
-            xAxis : [
-                {
-                    type : 'category',
-                    data : ['星期六','星期日','星期一','星期二','星期三','星期四','星期五']
-                }
-            ],
-            yAxis : [
-                {
-                    type : 'value'
-                }
-            ],
-            grid: {
-                y2: 80
-            },
-            series : [
-                {
-                    name: '新增用户',
-                    type: 'line',
-                    showAllSymbol: true,
-                    data: function () {
-                        var d = [];
-                        {% for data in datas %}
-                            d.push(
-                                {{ data[1]}}
-                            );
-                        {% endfor %}
-                        return d;
-                    }()
-                },
-                {
-                    name: '新增开局',
-                    type: 'line',
-                    showAllSymbol: true,
-                    data: function () {
-                          var d = [];
-                        {% for data in datas %}
-                              d.push(
-                                {{ data[2]}}
-                              );
-                          {% endfor %}
-                          return d;
-                      }()
-                }
-            ]
-        };
+                            show : true,
+                            feature : {
+                                mark : {show: false},
+                                dataView : {show: false, readOnly: false},
+                                magicType : {show: true, type: ['line', 'bar']},
+                                restore : {show: true},
+                                saveAsImage : {show: false}
+                            }
+                        },
+                        calculable : true,
+                        legend : {
+                            data : ['新增用户','新增开局']
+                        },
+                        xAxis : [
+                            {
+                                type : 'category',
+                                data : ['星期六','星期日','星期一','星期二','星期三','星期四','星期五']
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value'
+                            }
+                        ],
+                        grid: {
+                            y2: 80
+                        },
+                        series : [
+                            {
+                                name: '新增用户',
+                                type: 'line',
+                                showAllSymbol: true,
+                                data: function () {
+                                    var d = [];
+                                    {% for data in datas %}
+                                        d.push(
+                                            {{ data[1]}}
+                                        );
+                                    {% endfor %}
+                                    return d;
+                                }()
+                            },
+                            {
+                                name: '新增开局',
+                                type: 'line',
+                                showAllSymbol: true,
+                                data: function () {
+                                      var d = [];
+                                    {% for data in datas %}
+                                          d.push(
+                                            {{ data[2]}}
+                                          );
+                                      {% endfor %}
+                                      return d;
+                                  }()
+                            }
+                        ]
+                    };
                     myChart.setOption(option);
                 </script>
             </div>

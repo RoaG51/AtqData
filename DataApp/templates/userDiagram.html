@@ -1,13 +1,21 @@
 {% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
 {% block useractive %}
-active
+    active
 {% endblock %}
+
 {% block userstyle %}
-style="display:block"
+    style="display:block"
 {% endblock %}
+
 {% block userDiagramactive %}
-class="active"
+    class="active"
 {% endblock %}
+
 {% block son %}
     <div class="tpl-content-wrapper">
         <div class="tpl-portlet-components">
@@ -70,7 +78,8 @@ class="active"
                         calculable : true,
                         dataZoom: {
                             show: true,
-                            start : 70
+                            start : 0,
+                            end:100
                         },
                         legend : {
                             data : ['新增用户','总用户数']
@@ -120,7 +129,7 @@ class="active"
                                     return d;
                                 }()
                             }
-                        ],
+                        ]
                     };
                     myChart.setOption(option);
                 </script>

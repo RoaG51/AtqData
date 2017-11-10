@@ -1,13 +1,21 @@
 {% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
 {% block dataactive %}
-active
+    active
 {% endblock %}
+
 {% block datastyle %}
-style="display:block"
+    style="display:block"
 {% endblock %}
+
 {% block periodAnalyseByWeekactive %}
-class="active"
+    class="active"
 {% endblock %}
+
 {% block son %}
     <div class="tpl-content-wrapper">
         <div class="tpl-portlet-components">
@@ -69,7 +77,7 @@ class="active"
                                 return data + '<br/>'
                                     + params.value[1]
                             }
-                            },
+                        },
                         toolbox: {
                             show : true,
                             feature : {
@@ -83,7 +91,8 @@ class="active"
                         calculable : true,
                         dataZoom: {
                             show: true,
-                            start : 70
+                            start : 0,
+                            end:100
                         },
                         legend : {
                             data : ['新增用户','新增开局']
@@ -104,7 +113,7 @@ class="active"
                         ],
                         series : [
                             {
-                            name: '新增用户',
+                                name: '新增用户',
                             type: 'line',
                             showAllSymbol: true,
                             data: function () {
@@ -117,8 +126,8 @@ class="active"
                                 {% endfor %}
                                 return d;
                             }()
-                        },
-                        {
+                            },
+                            {
                             name: '新增开局',
                             type: 'line',
                             showAllSymbol: true,
@@ -132,9 +141,9 @@ class="active"
                                 {% endfor %}
                                 return d;
                             }()
-                        }
-                    ]
-                };
+                            }
+                        ]
+                    };
                     myChart.setOption(option);
                 </script>
             </div>

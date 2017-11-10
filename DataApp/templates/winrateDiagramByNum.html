@@ -1,13 +1,21 @@
 {% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
 {% block gameactive %}
-active
+    active
 {% endblock %}
+
 {% block gamestyle %}
-style="display:block"
+    style="display:block"
 {% endblock %}
+
 {% block winrateDiagramByNumactive %}
-class="active"
+    class="active"
 {% endblock %}
+
 {% block son %}
     <div class="tpl-content-wrapper">
         <div class="tpl-portlet-components">
@@ -27,42 +35,40 @@ class="active"
                 <script type="text/javascript">
                     var myChart = echarts.init(document.getElementById('main'));
                     option = {
-                title: {
-                    text: '{{title}}胜率统计统计',
-                    left: 'center'
-                },
-                tooltip : {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
-                },
-                legend: {
-                    // orient: 'vertical',
-                    // top: 'middle',
-                    bottom: 10,
-                    left: 'center',
-                    data: ['{{datas[0][0]}}', '{{datas[1][0]}}']
-                },
-                series : [
-                    {
-                        type: 'pie',
-                        radius : '65%',
-                        center: ['50%', '50%'],
-                        selectedMode: 'single',
-                        data:[
-                            {value:{{datas[0][1]}},name:'{{datas[0][0]}}'},
-                            {value:{{datas[1][1]}},name:'{{datas[1][0]}}'}
+                        title: {
+                            text: '{{title}}胜率统计统计',
+                            left: 'center'
+                        },
+                        tooltip : {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        legend: {
+                            bottom: 10,
+                            left: 'center',
+                            data: ['{{datas[0][0]}}', '{{datas[1][0]}}']
+                        },
+                        series : [
+                            {
+                                type: 'pie',
+                                radius : '65%',
+                                center: ['50%', '50%'],
+                                selectedMode: 'single',
+                                data:[
+                                    {value:{{datas[0][1]}},name:'{{datas[0][0]}}'},
+                                    {value:{{datas[1][1]}},name:'{{datas[1][0]}}'}
 
-                        ],
-                        itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                ],
+                                itemStyle: {
+                                    emphasis: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
                             }
-                        }
-                    }
-                ]
-            };
+                        ]
+                    };
                     myChart.setOption(option);
                 </script>
             </div>
