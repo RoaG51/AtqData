@@ -332,6 +332,7 @@ def userMapByProvince():
         u'香港特别行政区': u'香港',
         u'澳门特别行政区': u'澳门'
     }
+    refreshLocalUserGeo()
     myData = []
     for i in range(3):
         dbdatas = db.session.query(s_data_usergeo.province,func.count(s_data_usergeo.province)).group_by(
