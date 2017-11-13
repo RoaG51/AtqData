@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
+{% block geoactive %}
+    active
+{% endblock %}
+
+{% block geostyle %}
+    style="display:block"
+{% endblock %}
+
+{% block geoListactive %}
+    class="active"
+{% endblock %}
+
+{% block son %}
+    <div class="tpl-content-wrapper">
+        <ol class="am-breadcrumb">
+            <li><a href="{{ url_for('show_index') }}" class="am-icon-home">首页</a></li>
+            <li><i class="am-icon-users">地理统计</i></li>
+            <li>地理用户列表</li>
+        </ol>
+        <form class="am-form am-g">
+            <table width="100%" class="am-table am-table-bordered am-table-radius am-table-striped am-table-hover ">
+                <thead>
+                <tr class="am-success ">
+                    <th class="table-id am-text-center">ID</th>
+                    <th class="table-title am-text-center">姓名</th>
+                    <th class="table-title am-text-center">性别</th>
+                    <th class="table-ip am-text-center">注册IP</th>
+                    <th class="table-title am-text-center">省</th>
+                    <th class="table-title am-text-center">市</th>
+                    <th class="table-title am-text-center">总开局数</th>
+                </tr>
+                </thead>
+                <tbody id="tablelsw" class="am-text-center am-text-middle">
+                {% for user in users %}
+                    <tr>
+                        <td class="am-text-center am-text-middle">{{ user.userid }}</td>
+                        <td class="am-text-center am-text-middle"><script type="text/javascript">document.write(decodeURIComponent('{{ user.name }}'));</script></td>
+                        <td class="am-text-center am-text-middle">
+                            <script type="text/javascript">
+                                if({{ user.wxsex}}==1)
+                                document.write('男');
+                                else if ({{ user.wxsex}}==2)
+                                document.write('女');
+                                else
+                                document.write('游客');
+                            </script>
+                        </td>
+                        <td class="am-text-center am-text-middle">{{ user.ip}}</td>
+                        <td class="am-text-center am-text-middle">{{ user.province}}</td>
+                        <td class="am-text-center am-text-middle">{{ user.city}}</td>
+                        <td class="am-text-center am-text-middle">{{ user.game}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <ul class="am-pagination am-fr">
+                总用户数：{{tol_user}}
+                <li><a href="{{url_for('userListByGeoPage',page=1)}}">首页</a></li>
+                <li><a href="{{url_for('userListByGeoPage',page=(1 if cur_page==1 else cur_page-1))}}">上一页</a></li>
+                <li><a href="{{url_for('userListByGeoPage',page=(tol_page if cur_page==tol_page else cur_page+1))}}">下一页</a></li>
+                <li><a href="{{url_for('userListByGeoPage',page=tol_page)}}">末页</a></li>
+                第<span>{{ cur_page }}</span>页/共<span>{{ tol_page }}</span>页
+            </ul>
+            <hr />
+        </form>
+    </div>
+{% endblock %}

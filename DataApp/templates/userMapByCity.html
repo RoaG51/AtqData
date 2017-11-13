@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
+{% block geoactive %}
+    active
+{% endblock %}
+
+{% block geostyle %}
+    style="display:block"
+{% endblock %}
+
+{% block Map2active %}
+    class="active"
+{% endblock %}
+
+{% block son %}
+    <div class="tpl-content-wrapper">
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    城市地理视图
+                </div>
+            </div>
+            <div class="tpl-echarts tpl-chart-mb" id="container">
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+                <script type="text/javascript">
+                    var dom = document.getElementById("container");
+                    var myChart = echarts.init(dom);
+                    var app = {};
+                    option = null;
+                    var geoCoordMap = {
+                         {% for posGeo in posGeos %}
+                             "{{posGeo.city}}":[{{posGeo.pos_x}},{{posGeo.pos_y}}],
+                         {% endfor %}
+                    }
+
+                    var convertData = function (data) {
+                        var res = [];
+                        for (var i = 0; i < data.length; i++) {
+                            var geoCoord = geoCoordMap[data[i].name];
+                            if (geoCoord) {
+                                res.push({
+                                    name: data[i].name,
+                                    value: geoCoord.concat(data[i].value)
+                                });
+                            }
+                        }
+                        return res;
+                    };
+
+                    option = {
+                        toolbox: {
+                            show: true,
+                            orient: 'vertical',
+                            left: 'right',
+                            feature: {
+                                dataView: {readOnly: true},
+                                restore: {}
+                            }
+                        },
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: function (params) {
+                                return params.name + ' : ' + params.value[2];
+                            }
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data:['男','女','游客','总数'],
+                            selected :{
+                                '男' : false,
+                                '女' : false,
+                                '游客':false,
+                                '总数':true
+                            }
+                        },
+                        visualMap: {
+                            min: 0,
+                            max: 200,
+                            calculable: true,
+                            inRange: {
+                                color: ['#50a3ba', '#eac736', '#d94e5d']
+                            }
+                        },
+                        geo: {
+                            map: 'china',
+                            roam:true,
+                            label: {
+                                emphasis: {
+                                    show: false
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    areaColor: '#323c48', //省背景色
+                                    borderColor: '#111' //省分界线颜色
+                                },
+                                emphasis: {
+                                    areaColor: '#2a333d' //选择省区域高亮色
+                                }
+                            }
+                        },
+                        series: [
+                            {
+                                name: '男',
+                                type: 'scatter',
+                                coordinateSystem: 'geo',
+                                data: convertData([
+                                    {% for maleGeo in maleGeos %}
+                                        {name: "{{maleGeo.city}}", value: {{maleGeo[1]}}},
+                                    {% endfor %}
+                                ]),
+                                symbolSize: 12,  //点尺寸
+                                label: {
+                                    normal: {
+                                        show: false  //点上显示数据
+                                    },
+                                    emphasis: {
+                                        show: false  //移动点上显示数据
+                                    }
+                                },
+                                itemStyle: {
+                                    emphasis: {
+                                        borderColor: '#fff',  //移动点上点边缘颜色
+                                        borderWidth: 1  //移动点上点边缘大小
+                                    }
+                                }
+                            },
+                            {
+                                name: '女',
+                                type: 'scatter',
+                                coordinateSystem: 'geo',
+                                data: convertData([
+                                    {% for femaleGeo in femaleGeos %}
+                                        {name: "{{femaleGeo.city}}", value: {{femaleGeo[1]}}},
+                                    {% endfor %}
+                                ]),
+                                symbolSize: 12,  //点尺寸
+                                label: {
+                                    normal: {
+                                        show: false  //点上显示数据
+                                    },
+                                    emphasis: {
+                                        show: false  //移动点上显示数据
+                                    }
+                                },
+                                itemStyle: {
+                                    emphasis: {
+                                        borderColor: '#fff',  //移动点上点边缘颜色
+                                        borderWidth: 1  //移动点上点边缘大小
+                                    }
+                                }
+                            },
+                            {
+                                name: '游客',
+                                type: 'scatter',
+                                coordinateSystem: 'geo',
+                                data: convertData([
+                                    {% for guestGeo in guestGeos %}
+                                        {name: "{{guestGeo.city}}", value: {{guestGeo[1]}}},
+                                    {% endfor %}
+                                ]),
+                                symbolSize: 12,  //点尺寸
+                                label: {
+                                    normal: {
+                                        show: false  //点上显示数据
+                                    },
+                                    emphasis: {
+                                        show: false  //移动点上显示数据
+                                    }
+                                },
+                                itemStyle: {
+                                    emphasis: {
+                                        borderColor: '#fff',  //移动点上点边缘颜色
+                                        borderWidth: 1  //移动点上点边缘大小
+                                    }
+                                }
+                            },
+                            {
+                                name: '总数',
+                                type: 'scatter',
+                                coordinateSystem: 'geo',
+                                data: convertData([
+                                    {% for totalGeo in totalGeos %}
+                                        {name: "{{totalGeo.city}}", value: {{totalGeo[1]}}},
+                                    {% endfor %}
+                                ]),
+                                symbolSize: 12,  //点尺寸
+                                label: {
+                                    normal: {
+                                        show: false  //点上显示数据
+                                    },
+                                    emphasis: {
+                                        show: false  //移动点上显示数据
+                                    }
+                                },
+                                itemStyle: {
+                                    emphasis: {
+                                        borderColor: '#fff',  //移动点上点边缘颜色
+                                        borderWidth: 1  //移动点上点边缘大小
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    if (option && typeof option === "object") {
+                        myChart.setOption(option, true);
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

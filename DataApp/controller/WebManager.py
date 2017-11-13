@@ -5,13 +5,14 @@ from DataApp.model.s_plat_fightlog import s_plat_fightlog
 from DataApp.model.s_data_numbyday import s_data_numbyday
 from DataApp.model.s_data_numbyweek import s_data_numbyweek
 from DataApp.model.s_data_numbyhour import s_data_numbyhour
+from DataApp.model.s_data_usergeo import s_data_usergeo
+from DataApp.model.s_data_admin import s_data_admin
 from DataApp import app,db
-from flask import render_template,redirect,url_for
+from flask import render_template,redirect,url_for,request,session,flash
+from sqlalchemy import func,funcfilter
 from datetime import datetime
-from innerFunctions import periodAnalyse,refreshLocalDbDay,refreshLocalDbWeek,refreshLocalDbHour
+from innerFunctions import periodAnalyse,refreshLocalDbDay,refreshLocalDbWeek,refreshLocalDbHour,refreshLocalUserGeo,ipToGeo
 import time,math
-
-
 
 
 @app.route('/')
@@ -30,6 +31,30 @@ def show_index():
     tol_game = len(gdgames)
     return render_template('index.html',tol_user = tol_user,tol_wechat = tol_wechat, tol_guest = tol_guest , tol_game = tol_game,datas = myData[0:5] )
 
+@app.route('/login',methods=['GET','POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        user = s_data_admin.query.filter_by(username=request.form['username']).first()
+        passwd = s_data_admin.query.filter_by(password=request.form['password']).first()
+
+        if user is None:
+            error = u'用户名错误！'
+        elif passwd is None:
+            error = u'密码错误！'
+        else:
+            session['logged_in'] = True
+            session['username'] = request.form['username']
+            flash(u'登录成功！')
+            return redirect(url_for('show_index'))
+    return render_template('index.html',error = error)
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    flash(u'登出成功！')
+    return redirect(url_for('show_index'))
 
 @app.route('/gameList')
 def gameList():
@@ -256,3 +281,80 @@ def winrateDiagramByNumPage(num):
     myData.append([u"许愿阵营获胜", len(xy)])
     myData.append([u"老朝奉阵营获胜", len(lcf)])
     return render_template('winrateDiagramByNum.html', datas=myData, title = title)
+
+@app.route('/userListByGeo')
+def userListByGeo():
+    return redirect(url_for('userListByGeoPage', page=1))
+@app.route('/userListByGeo/<int:page>')
+def userListByGeoPage(page):
+    refreshLocalUserGeo()
+    myData = s_data_usergeo.query.order_by(db.desc(s_data_usergeo.game)).all()
+    tol_item = len(myData)
+    tol_page = int(math.ceil(tol_item / 20.0))
+    cur_page = page
+    return render_template('userListByGeo.html', users=myData[20*page-20:20*page], cur_page = cur_page, tol_page = tol_page, tol_user = tol_item )
+
+@app.route('/userMapByProvince')
+def userMapByProvince():
+    transProvince ={
+        u"北京市": u'北京',
+        u"天津市": u'天津',
+        u"上海市": u'上海',
+        u"重庆市": u'重庆',
+        u'河北省': u'河北',
+        u'河南省': u'河南',
+        u'云南省': u'云南',
+        u'辽宁省': u'辽宁',
+        u'黑龙江省': u'黑龙江',
+        u'湖南省': u'湖南',
+        u'安徽省': u'安徽',
+        u'山东省': u'山东',
+        u'新疆维吾尔自治区': u'新疆',
+        u'江苏省': u'江苏',
+        u'浙江省': u'浙江',
+        u'江西省': u'江西',
+        u'湖北省': u'湖北',
+        u'广西壮族自治区': u'广西',
+        u'甘肃省': u'甘肃',
+        u'山西省': u'山西',
+        u'内蒙古自治区': u'内蒙古',
+        u'陕西省': u'陕西',
+        u'吉林省': u'吉林',
+        u'福建省': u'福建',
+        u'贵州省': u'贵州',
+        u'广东省': u'广东',
+        u'青海省': u'青海',
+        u'西藏自治区': u'西藏',
+        u'四川省': u'四川',
+        u'宁夏回族自治区': u'宁夏',
+        u'海南省': u'海南',
+        u'台湾省': u'台湾',
+        u'香港特别行政区': u'香港',
+        u'澳门特别行政区': u'澳门'
+    }
+    myData = []
+    for i in range(3):
+        dbdatas = db.session.query(s_data_usergeo.province,func.count(s_data_usergeo.province)).group_by(
+        s_data_usergeo.province).distinct().filter(s_data_usergeo.wxsex == i+1).all()
+        dataItem = []
+        for dbdata in dbdatas:
+            if dbdata.province in transProvince.keys():
+                dataItem.append([transProvince[dbdata.province],dbdata[1]])
+        myData.append(dataItem)
+    # return render_template('testList.html', games=myData, cur_page=1, tol_page=1, tol_game=len(dataItem))
+    return render_template('userMapByProvince.html',datas = myData)
+
+@app.route('/userMapByCity')
+def userMapByCity():
+    refreshLocalUserGeo()
+    posGeo = db.session.query(s_data_usergeo.city,s_data_usergeo.pos_x, s_data_usergeo.pos_y).group_by(
+        s_data_usergeo.city).distinct().all()
+    maleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(
+        s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 1).all()
+    femaleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(
+        s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 2).all()
+    guestGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(
+        s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 3).all()
+    totalGeo = db.session.query(s_data_usergeo.city,func.count(s_data_usergeo.city)).group_by(
+        s_data_usergeo.city).distinct().all()
+    return render_template('userMapByCity.html', posGeos = posGeo,maleGeos=maleGeo,femaleGeos=femaleGeo,guestGeos=guestGeo,totalGeos=totalGeo)

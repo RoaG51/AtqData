@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block viewport %}
+    <meta name="viewport" content="maximum-scale=1.05">
+{% endblock %}
+
+{% block geoactive %}
+    active
+{% endblock %}
+
+{% block geostyle %}
+    style="display:block"
+{% endblock %}
+
+{% block Mapactive %}
+    class="active"
+{% endblock %}
+
+{% block son %}
+    <div class="tpl-content-wrapper">
+        <div class="tpl-portlet-components">
+            <div class="portlet-title">
+                <div class="caption font-green bold">
+                    省级地理视图
+                </div>
+            </div>
+            <div class="tpl-echarts tpl-chart-mb" id="container">
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+                <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+                <script type="text/javascript">
+                    var dom = document.getElementById("container");
+                    var myChart = echarts.init(dom);
+                    var app = {};
+                    option = null;
+                    
+                    option = {
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: function(params) {
+                                var res = params.name+'<br/>';
+                                var myseries = option.series;
+                                for (var i = 0; i < myseries.length; i++) {
+                                    for(var j=0;j<myseries[i].data.length;j++){
+                                        if(myseries[i].data[j].name == params.name){
+                                            res += myseries[i].name + ':'+ myseries[i].data[j].value+ '</br>';
+                                        }
+                                    }
+                                }
+                                return res + '当前所选总计：' + params.value;
+                            }
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                            data:['男','女','游客']
+                        },
+                        visualMap: {
+                            min: 0,
+                            max: 1000,
+                            left: 'left',
+                            top: 'bottom',
+                            text: ['高','低'],
+                            calculable: true
+                        },
+                        toolbox: {
+                            show: true,
+                            orient: 'vertical',
+                            left: 'right',
+                            feature: {
+                                dataView: {readOnly: true},
+                                restore: {},
+                            }
+                        },
+                        series: [
+                            {
+                                name: '男',
+                                type: 'map',
+                                mapType: 'china',
+                                roam: true,
+                                label: {
+                                    normal: {
+                                        show: true //地图显示省名
+                                    },
+                                    emphasis: {
+                                        show: true
+                                    }
+                                },
+                                data:[
+                                     {% for data in datas[0] %}
+                                        {name: "{{data[0]}}", value: {{data[1]}}},
+                                    {% endfor %}
+                                ]
+                            },
+                            {
+                                name: '女',
+                                type: 'map',
+                                mapType: 'china',
+                                roam: true,
+                                label: {
+                                    normal: {
+                                        show: true
+                                    },
+                                    emphasis: {
+                                        show: true
+                                    }
+                                },
+                                data:[
+                                    {% for data in datas[1] %}
+                                        {name: "{{data[0]}}", value: {{data[1]}}},
+                                    {% endfor %}
+                                ]
+                            },
+                            {
+                                name: '游客',
+                                type: 'map',
+                                mapType: 'china',
+                                roam: true,
+                                label: {
+                                    normal: {
+                                        show: true
+                                    },
+                                    emphasis: {
+                                        show: true
+                                    }
+                                },
+                                data:[
+                                    {% for data in datas[2] %}
+                                        {name: "{{data[0]}}", value: {{data[1]}}},
+                                    {% endfor %}
+                                ]
+                            }
+                        ]
+                    };
+                    if (option && typeof option === "object") {
+                        myChart.setOption(option, true);
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+{% endblock %}
