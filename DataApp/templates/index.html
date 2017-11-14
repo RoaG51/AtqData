@@ -90,6 +90,45 @@
                                 <th class="am-text-center">星期</th>
                                 <th class="am-text-center">新增</th>
                             </tr>
+                            <tr>
+                                <td class="am-text-center">
+                                    <script type="text/javascript">
+                                    var unixTimestamp = new Date(({{ datas[0].time }}+3600*24)*1000);
+                                    document.write(unixTimestamp.toLocaleString());</script>
+                                </td>
+                                <td class="am-text-center">
+                                     <script type="text/javascript">
+                                     var unixTimestamp = new Date(({{ datas[0].time }}+3600*24)*1000);
+                                     Day = unixTimestamp.getDay()
+                                     switch (Day) {
+                                         case 0:
+                                             document.write('星期日');
+                                             break;
+                                         case 1:
+                                             document.write('星期一');
+                                             break;
+                                         case 2:
+                                             document.write('星期二');
+                                             break;
+                                         case 3:
+                                             document.write('星期三');
+                                             break;
+                                         case 4:
+                                             document.write('星期四');
+                                             break;
+                                         case 5:
+                                             document.write('星期五');
+                                             break;
+                                         case 6:
+                                             document.write('星期六');
+                                             break;
+                                         default:
+                                             document.write('未知星期');
+                                     }
+                                    </script>
+                                </td>
+                                <td class="am-text-center">{{todayUser}}</td>
+                            </tr>
                              {% for data in datas %}
                             <tr>
                                 <td class="am-text-center">
@@ -148,6 +187,45 @@
                                 <th class="am-text-center">日期</th>
                                 <th class="am-text-center">星期</th>
                                 <th class="am-text-center">新开</th>
+                            </tr>
+                            <tr>
+                                <td class="am-text-center">
+                                    <script type="text/javascript">
+                                    var unixTimestamp = new Date(({{ datas[0].time }}+3600*24)*1000);
+                                    document.write(unixTimestamp.toLocaleString());</script>
+                                </td>
+                                <td class="am-text-center">
+                                     <script type="text/javascript">
+                                     var unixTimestamp = new Date(({{ datas[0].time }}+3600*24)*1000);
+                                     Day = unixTimestamp.getDay()
+                                     switch (Day) {
+                                         case 0:
+                                             document.write('星期日');
+                                             break;
+                                         case 1:
+                                             document.write('星期一');
+                                             break;
+                                         case 2:
+                                             document.write('星期二');
+                                             break;
+                                         case 3:
+                                             document.write('星期三');
+                                             break;
+                                         case 4:
+                                             document.write('星期四');
+                                             break;
+                                         case 5:
+                                             document.write('星期五');
+                                             break;
+                                         case 6:
+                                             document.write('星期六');
+                                             break;
+                                         default:
+                                             document.write('未知星期');
+                                     }
+                                    </script>
+                                </td>
+                                <td class="am-text-center">{{todayGame}}</td>
                             </tr>
                             {% for data in datas %}
                             <tr>

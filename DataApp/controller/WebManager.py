@@ -18,8 +18,11 @@ import time,math
 @app.route('/')
 def show_index():
     refreshLocalDbDay()
-    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
-    myData.reverse()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).order_by(db.desc(s_data_numbyday.time)).all()
+
+    now = time.time()
+    todayUser = s_plat_user.query.filter(s_plat_user.regTime>myData[0].time).filter(s_plat_user.regTime < now).count()
+    todayGame = s_plat_fightlog.query.filter(s_plat_fightlog.logTime >myData[0].time).filter(s_plat_fightlog.logTime < now).count()
 
     gdusers = s_plat_user.query.all()
     gsusers = s_plat_user.query.filter(s_plat_user.wxid.like("player_%")).all()
@@ -29,7 +32,7 @@ def show_index():
     tol_wechat = tol_user - tol_guest
     gdgames = s_plat_fightlog.query.all()
     tol_game = len(gdgames)
-    return render_template('index.html',tol_user = tol_user,tol_wechat = tol_wechat, tol_guest = tol_guest , tol_game = tol_game,datas = myData[0:5] )
+    return render_template('index.html',tol_user = tol_user,tol_wechat = tol_wechat, tol_guest = tol_guest , tol_game = tol_game,todayUser = todayUser,todayGame=todayGame,datas = myData[0:4] )
 
 @app.route('/login',methods=['GET','POST'])
 def login():
