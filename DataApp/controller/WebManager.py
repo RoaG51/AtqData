@@ -345,20 +345,14 @@ def userMapByProvince():
             if dbdata.province in transProvince.keys():
                 dataItem.append([transProvince[dbdata.province],dbdata[1]])
         myData.append(dataItem)
-    # return render_template('testList.html', games=myData, cur_page=1, tol_page=1, tol_game=len(dataItem))
     return render_template('userMapByProvince.html',datas = myData)
 
 @app.route('/userMapByCity')
 def userMapByCity():
     refreshLocalUserGeo()
-    posGeo = db.session.query(s_data_usergeo.city,s_data_usergeo.pos_x, s_data_usergeo.pos_y).group_by(
-        s_data_usergeo.city).distinct().all()
-    maleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(
-        s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 1).all()
-    femaleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(
-        s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 2).all()
-    guestGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(
-        s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 3).all()
-    totalGeo = db.session.query(s_data_usergeo.city,func.count(s_data_usergeo.city)).group_by(
-        s_data_usergeo.city).distinct().all()
+    posGeo = db.session.query(s_data_usergeo.city,s_data_usergeo.pos_x, s_data_usergeo.pos_y).group_by(s_data_usergeo.city).distinct().all()
+    maleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 1).all()
+    femaleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 2).all()
+    guestGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 3).all()
+    totalGeo = db.session.query(s_data_usergeo.city,func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().all()
     return render_template('userMapByCity.html', posGeos = posGeo,maleGeos=maleGeo,femaleGeos=femaleGeo,guestGeos=guestGeo,totalGeos=totalGeo)

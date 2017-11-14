@@ -162,32 +162,34 @@ def refreshLocalUserGeo():
 
     i = 1
     searchItem = s_plat_user.query.filter(s_plat_user.id == updateID + i).first()
+    exitItem = s_data_usergeo.query.filter(s_data_usergeo.userid == updateID + i).first()
     while searchItem != None:
-        if searchItem.wxhead == '':
-            iswx = 0
-            wxsex = 3
-        else:
-            iswx = 1
-            wxsex = searchItem.wxsex
-        bfs = s_plat_fightbfs.query.filter(s_plat_fightbfs.userId == searchItem.id).first()
-        if not bfs:
-            game = 0
-        else:
-            game = bfs.wins +bfs.losts
+        if exitItem == None:
+            if searchItem.wxhead == '':
+                iswx = 0
+                wxsex = 3
+            else:
+                iswx = 1
+                wxsex = searchItem.wxsex
+            bfs = s_plat_fightbfs.query.filter(s_plat_fightbfs.userId == searchItem.id).first()
+            if not bfs:
+                game = 0
+            else:
+                game = bfs.wins +bfs.losts
 
-        geo = ipToGeo(searchItem.regIp)
-        if type(geo) != int:
-            city_code = geo["content"]["address_detail"]["city_code"]
-            province = geo["content"]["address_detail"]["province"]
-            city = geo["content"]["address_detail"]["city"]
-            pos_x = geo["content"]["point"]["x"]
-            pos_y = geo["content"]["point"]["y"]
-        else:
-            city_code = -1
-            province = "未知省份"
-            city = "未知城市"
-            pos_x = geo
-            pos_y = geo
+            geo = ipToGeo(searchItem.regIp)
+            if type(geo) != int:
+                city_code = geo["content"]["address_detail"]["city_code"]
+                province = geo["content"]["address_detail"]["province"]
+                city = geo["content"]["address_detail"]["city"]
+                pos_x = geo["content"]["point"]["x"]
+                pos_y = geo["content"]["point"]["y"]
+            else:
+                city_code = -1
+                province = "未知省份"
+                city = "未知城市"
+                pos_x = geo
+                pos_y = geo
 
 
         newItem = s_data_usergeo(userid=searchItem.id,ip = searchItem.regIp,city_code=city_code,province=province, city=city, pos_x= pos_x ,pos_y=pos_y,iswx=iswx,wxsex=wxsex,name=searchItem.name,game=game)
