@@ -9,9 +9,9 @@ from DataApp.model.s_data_usergeo import s_data_usergeo
 from DataApp.model.s_data_admin import s_data_admin
 from DataApp import app,db
 from flask import render_template,redirect,url_for,request,session,flash
-from sqlalchemy import func,funcfilter
+from sqlalchemy import func
 from datetime import datetime
-from innerFunctions import periodAnalyse,refreshLocalDbDay,refreshLocalDbWeek,refreshLocalDbHour,refreshLocalUserGeo,ipToGeo
+from innerFunctions import periodAnalyse,refreshLocalDbDay,refreshLocalDbWeek,refreshLocalDbHour,refreshLocalUserGeo
 import time,math
 
 
@@ -98,8 +98,7 @@ def dayUpGameList():
 @app.route('/dayUpGameList/<int:page>')
 def dayUpGameListPage(page):
     refreshLocalDbDay()
-    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
-    myData.reverse()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).order_by(db.desc(s_data_numbyday.time)).all()
     tol_item = len(myData)
     tol_page = int(math.ceil(tol_item / 20.0))
     cur_page = page
@@ -111,8 +110,7 @@ def dayUpUserList():
 @app.route('/dayUpUserList/<int:page>')
 def dayUpUserListPage(page):
     refreshLocalDbDay()
-    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
-    myData.reverse()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).order_by(db.desc(s_data_numbyday.time)).all()
     tol_item = len(myData)
     tol_page = int(math.ceil(tol_item / 20.0))
     cur_page = page
@@ -134,27 +132,27 @@ def userListByGamePage(page):
 @app.route('/userDiagram')
 def userDiagram():
     refreshLocalDbDay()
-    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).order_by(s_data_numbyday.time).all()
     return render_template('userDiagram.html', datas=myData)
 
 
 @app.route('/gameDiagram')
 def gameDiagram():
     refreshLocalDbDay()
-    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).all()
+    myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).order_by(s_data_numbyday.time).all()
     return render_template('gameDiagram.html',datas = myData)
 
 
 @app.route('/userDiagramByWeek')
 def userDiagramByWeek():
     refreshLocalDbWeek()
-    myData = s_data_numbyweek.query.filter(s_data_numbyweek.usertolnum > 0).all()
+    myData = s_data_numbyweek.query.filter(s_data_numbyweek.usertolnum > 0).order_by(s_data_numbyweek.time).all()
     return render_template('userDiagramByWeek.html', datas=myData)
 
 @app.route('/gameDiagramByWeek')
 def gameDiagramByWeek():
     refreshLocalDbWeek()
-    myData = s_data_numbyweek.query.filter(s_data_numbyweek.usertolnum > 0).all()
+    myData = s_data_numbyweek.query.filter(s_data_numbyweek.usertolnum > 0).order_by(s_data_numbyweek.time).all()
     return render_template('gameDiagramByWeek.html',datas = myData)
 
 @app.route('/userDataByGame')
@@ -198,7 +196,7 @@ def periodAnalyseByDay():
 @app.route('/periodAnalyseByDay/<int:order>')
 def periodAnalyseByDayOrder(order):
     refreshLocalDbHour()
-    myData = s_data_numbyhour.query.filter(s_data_numbyhour.hour < 25).filter(s_data_numbyhour.hour == order).all()
+    myData = s_data_numbyhour.query.filter(s_data_numbyhour.hour < 25).filter(s_data_numbyhour.hour == order).order_by(s_data_numbyhour.time).all()
     return render_template('periodAnalyseByDay.html', datas=myData,order = order)
 
 @app.route('/periodAnalyseByDayTotal')
@@ -350,9 +348,14 @@ def userMapByProvince():
 @app.route('/userMapByCity')
 def userMapByCity():
     refreshLocalUserGeo()
-    posGeo = db.session.query(s_data_usergeo.city,s_data_usergeo.pos_x, s_data_usergeo.pos_y).group_by(s_data_usergeo.city).distinct().all()
-    maleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 1).all()
-    femaleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 2).all()
-    guestGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().filter(s_data_usergeo.wxsex == 3).all()
-    totalGeo = db.session.query(s_data_usergeo.city,func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().all()
+    posGeo = db.session.query(s_data_usergeo.city,s_data_usergeo.pos_x, s_data_usergeo.pos_y ).\
+        group_by(s_data_usergeo.city).distinct().filter(s_data_usergeo.city != "").filter(s_data_usergeo.city != "未知城市").all()
+    maleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().\
+        filter(s_data_usergeo.wxsex == 1).filter(s_data_usergeo.city != "").filter(s_data_usergeo.city != "未知城市").all()
+    femaleGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().\
+        filter(s_data_usergeo.wxsex == 2).filter(s_data_usergeo.city != "").filter(s_data_usergeo.city != "未知城市").all()
+    guestGeo = db.session.query(s_data_usergeo.city, func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct().\
+        filter(s_data_usergeo.wxsex == 3).filter(s_data_usergeo.city != "").filter(s_data_usergeo.city != "未知城市").all()
+    totalGeo = db.session.query(s_data_usergeo.city,func.count(s_data_usergeo.city)).group_by(s_data_usergeo.city).distinct(). \
+        filter(s_data_usergeo.city != "").filter(s_data_usergeo.city != "未知城市").all()
     return render_template('userMapByCity.html', posGeos = posGeo,maleGeos=maleGeo,femaleGeos=femaleGeo,guestGeos=guestGeo,totalGeos=totalGeo)

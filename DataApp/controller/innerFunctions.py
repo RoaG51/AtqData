@@ -51,6 +51,9 @@ def refreshLocalDbDay():
     toDay = time.time()
     secDay = 24 * 3600
     i = 0
+    firstItem= s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).filter(s_data_numbyday.time == updateTime).first()
+    if updateTime + secDay * (i+2) >= toDay and firstItem != None:
+        return updateTime
     while updateTime + secDay * (i+1) < toDay:
         searchItem = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).filter(s_data_numbyday.time == updateTime + secDay * i).first()
         if searchItem == None:
@@ -87,6 +90,9 @@ def refreshLocalDbWeek():
     toDay = time.time()
     secWeek = 24 * 3600 * 7
     i = 0
+    firstItem = s_data_numbyweek.query.filter(s_data_numbyweek.time == updateTime).filter(s_data_numbyweek.usertolnum > 0).first()
+    if updateTime + secWeek * (i + 2) >= toDay and firstItem != None:
+        return updateTime
     while updateTime + secWeek * (i + 1) < toDay:
         searchItem = s_data_numbyweek.query.filter(s_data_numbyweek.time == updateTime + secWeek * i).filter(s_data_numbyweek.usertolnum > 0).first()
         if searchItem == None:
@@ -125,6 +131,9 @@ def refreshLocalDbHour():
     secHour =  3600
     hourcounter= updateItem.hour
     i = 0
+    firstItem = s_data_numbyhour.query.filter(s_data_numbyhour.time == updateTime).filter(s_data_numbyhour.hour < 25).first()
+    if updateTime + secHour * (i + 1) >= toDay and firstItem != None:
+        return updateTime
     while updateTime + secHour * (i + 1) < toDay:
         searchItem = s_data_numbyhour.query.filter(s_data_numbyhour.time == updateTime + secHour * i).filter(s_data_numbyhour.hour < 25).first()
         if searchItem == None:
@@ -163,6 +172,8 @@ def refreshLocalUserGeo():
     i = 1
     searchItem = s_plat_user.query.filter(s_plat_user.id == updateID + i).first()
     exitItem = s_data_usergeo.query.filter(s_data_usergeo.userid == updateID + i).first()
+    if searchItem == None:
+        return updateID
     while searchItem != None:
         if exitItem == None:
             if searchItem.wxhead == '':
