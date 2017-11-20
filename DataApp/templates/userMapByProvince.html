@@ -24,7 +24,7 @@
                     省级地理视图
                 </div>
             </div>
-            <div class="tpl-echarts tpl-chart-mb" id="container">
+            <div class="tpl-echarts tpl-chart-mb" style="height: 600px" id="container">
                 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
                 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
                 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
@@ -64,7 +64,10 @@
                             left: 'left',
                             top: 'bottom',
                             text: ['高','低'],
-                            calculable: true
+                            calculable: true,
+                            inRange: {
+                                color: ['#AAC1F9', '#EDEC36', '#d42d37']
+                            }
                         },
                         toolbox: {
                             show: true,
@@ -81,6 +84,7 @@
                                 type: 'map',
                                 mapType: 'china',
                                 roam: true,
+                                color: ['#2f4554'],
                                 label: {
                                     normal: {
                                         show: true //地图显示省名
@@ -100,6 +104,7 @@
                                 type: 'map',
                                 mapType: 'china',
                                 roam: true,
+                                color: ['#c23531'],
                                 label: {
                                     normal: {
                                         show: true

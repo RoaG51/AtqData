@@ -24,7 +24,7 @@
                     城市地理视图
                 </div>
             </div>
-            <div class="tpl-echarts tpl-chart-mb" id="container">
+            <div class="tpl-echarts tpl-chart-mb" style="height: 600px" id="container">
                 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
                 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
                 <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
@@ -37,9 +37,9 @@
                     var app = {};
                     option = null;
                     var geoCoordMap = {
-                         {% for posGeo in posGeos %}
-                             "{{posGeo.city}}":[{{posGeo.pos_x}},{{posGeo.pos_y}}],
-                         {% endfor %}
+                        {% for posGeo in posGeos %}
+                            "{{posGeo.city}}":[{{posGeo.pos_x}},{{posGeo.pos_y}}],
+                        {% endfor %}
                     }
 
                     var convertData = function (data) {
@@ -66,10 +66,52 @@
                                 restore: {}
                             }
                         },
+                        {#                        tooltip: {#}
+                        {#                            trigger: 'item',#}
+                        {#                            formatter: function (params) {#}
+                        {#                                return params.name + ' : ' + params.value[2];#}
+                        {#                            }#}
+                        {#                        },#}
                         tooltip: {
                             trigger: 'item',
-                            formatter: function (params) {
-                                return params.name + ' : ' + params.value[2];
+                            {#                            formatter : function (params) {#}
+                            {#                                var description = "";#}
+                            {#                                for (var i in params) {#}
+                            {#                                    description += i + " = " + params[i] + ' <br/>'#}
+                            {#                                }#}
+                            {#                                return description +' <br/>'#}
+                            {#                                       + params.data.name#}
+                            {#                            }#}
+                            formatter: function(params) {
+                                var res = params.name+'<br/>';
+                                var male = 0;
+                                var female = 0;
+                                var myseries = option.series;
+                                for (var i = 0; i < myseries.length; i++) {
+                                    for(var j=0;j<myseries[i].data.length;j++){
+                                        if(myseries[i].data[j].name == params.name){
+                                            res += myseries[i].name + ':'+ myseries[i].data[j].value[2]+ '</br>';
+                                            if(myseries[i].name == '男'){
+                                                male =  myseries[i].data[j].value[2];
+                                            }
+                                            if(myseries[i].name == '女'){
+                                                female =  myseries[i].data[j].value[2];
+                                            }
+                                        }
+                                    }
+                                }
+                                if(male!= 0) {
+                                    var point=male/(male+female);
+                                    var str = Number(point*100).toFixed(2);
+                                    str += '%';
+                                    res += myseries[0].name + ':' + str + '</br>';
+                                }
+                                if(female!=0) {var fepoint=female/(male+female);
+                                    var festr = Number(fepoint*100).toFixed(2);
+                                    festr += '%';
+                                    res += myseries[1].name + ':'+ festr + '</br>';
+                                }
+                                return res;
                             }
                         },
                         legend: {
@@ -113,6 +155,7 @@
                             {
                                 name: '男',
                                 type: 'scatter',
+                                color: ['#2f4554'],
                                 coordinateSystem: 'geo',
                                 data: convertData([
                                     {% for maleGeo in maleGeos %}
@@ -138,6 +181,7 @@
                             {
                                 name: '女',
                                 type: 'scatter',
+                                color: ['#c23531'],
                                 coordinateSystem: 'geo',
                                 data: convertData([
                                     {% for femaleGeo in femaleGeos %}
@@ -163,6 +207,7 @@
                             {
                                 name: '游客',
                                 type: 'scatter',
+                                color: ['#6ab0b8'],
                                 coordinateSystem: 'geo',
                                 data: convertData([
                                     {% for guestGeo in guestGeos %}
@@ -188,6 +233,7 @@
                             {
                                 name: '总数',
                                 type: 'scatter',
+                                color: ['#e98f6f'],
                                 coordinateSystem: 'geo',
                                 data: convertData([
                                     {% for totalGeo in totalGeos %}

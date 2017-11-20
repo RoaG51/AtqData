@@ -21,7 +21,8 @@ def show_index():
     myData = s_data_numbyday.query.filter(s_data_numbyday.usertolnum > 0).order_by(db.desc(s_data_numbyday.time)).all()
 
     now = time.time()
-    todayUser = s_plat_user.query.filter(s_plat_user.regTime>myData[0].time).filter(s_plat_user.regTime < now).count()
+    secDay = 3600 * 24
+    todayUser = s_plat_user.query.filter(s_plat_user.regTime>myData[0].time+secDay).filter(s_plat_user.regTime < now).count()
     todayGame = s_plat_fightlog.query.filter(s_plat_fightlog.logTime >myData[0].time).filter(s_plat_fightlog.logTime < now).count()
 
     gdusers = s_plat_user.query.all()
@@ -289,7 +290,7 @@ def userListByGeo():
 @app.route('/userListByGeo/<int:page>')
 def userListByGeoPage(page):
     refreshLocalUserGeo()
-    myData = s_data_usergeo.query.order_by(db.desc(s_data_usergeo.game)).all()
+    myData = s_data_usergeo.query.filter(s_data_usergeo.game != -1).order_by(db.desc(s_data_usergeo.userid)).all()
     tol_item = len(myData)
     tol_page = int(math.ceil(tol_item / 20.0))
     cur_page = page

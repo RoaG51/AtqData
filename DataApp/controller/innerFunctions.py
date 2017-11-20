@@ -202,10 +202,9 @@ def refreshLocalUserGeo():
                 pos_x = geo
                 pos_y = geo
 
-
-        newItem = s_data_usergeo(userid=searchItem.id,ip = searchItem.regIp,city_code=city_code,province=province, city=city, pos_x= pos_x ,pos_y=pos_y,iswx=iswx,wxsex=wxsex,name=searchItem.name,game=game)
-        db.session.add(newItem)
-        db.session.commit()
+            newItem = s_data_usergeo(userid=searchItem.id,ip = searchItem.regIp,city_code=city_code,province=province, city=city, pos_x= pos_x ,pos_y=pos_y,iswx=iswx,wxsex=wxsex,name=searchItem.name,game=game)
+            db.session.add(newItem)
+            db.session.commit()
         i += 1
         searchItem = s_plat_user.query.filter(s_plat_user.id == updateID + i).first()
     delete = s_data_usergeo.query.filter(s_data_usergeo.game == -1).first()
