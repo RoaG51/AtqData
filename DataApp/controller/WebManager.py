@@ -23,7 +23,7 @@ def show_index():
     now = time.time()
     secDay = 3600 * 24
     todayUser = s_plat_user.query.filter(s_plat_user.regTime>myData[0].time+secDay).filter(s_plat_user.regTime < now).count()
-    todayGame = s_plat_fightlog.query.filter(s_plat_fightlog.logTime >myData[0].time).filter(s_plat_fightlog.logTime < now).count()
+    todayGame = s_plat_fightlog.query.filter(s_plat_fightlog.logTime >myData[0].time+secDay).filter(s_plat_fightlog.logTime < now).count()
 
     gdusers = s_plat_user.query.all()
     gsusers = s_plat_user.query.filter(s_plat_user.wxid.like("player_%")).all()
